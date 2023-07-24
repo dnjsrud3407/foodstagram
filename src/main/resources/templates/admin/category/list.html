@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <link th:href="@{/css/common.css}" rel="stylesheet" />
+    <link th:href="@{/css/admin.css}" rel="stylesheet" />
+</head>
+<body>
+    <section>
+        <div>
+            <input type="button" value="추가" th:onclick="createModal()">
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>카테고리명</th>
+                    <th>활성화</th>
+                    <th></th>
+                    <th>생성 날짜</th>
+                    <th>수정 날짜</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="category : ${categories}">
+                    <td th:text="${category.id}">번호</td>
+                    <td th:id="|td-name_${category.id}|">
+                        <span th:text="${category.name}" th:id="|originalName_${category.id}|"></span>
+                    </td>
+                    <td th:id="|td-isDel_${category.id}|">
+                        <span th:text="${category.isDel}" th:id="|originalIsDel_${category.id}|" class="none"></span>
+                        <input type="checkbox" th:id="|isDel_${category.id}|" th:checked="${category.isDel == false} ? 'true' : 'false'" disabled>
+                    </td>
+                    <td th:id="|td-btn_${category.id}|">
+                        <input type="button" value="수정" th:id="|modifyFormBtn_${category.id}|" th:onclick="|modifyCategoryForm('${category.id}')|">
+                    </td>
+                    <td th:text="${#temporals.format(category.createdDate, 'yyyy-MM-dd HH:mm:ss')}">생성 날짜</td>
+                    <td th:text="${#temporals.format(category.modifiedDate, 'yyyy-MM-dd HH:mm:ss')}">수정 날짜</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <section>
+        <div id="modal" class="modal-overlay">
+            <div class="modal-window">
+                <div class="title">
+                    <h3>카테고리 추가</h3>
+                </div>
+                <div class="close-area">X</div>
+                <div class="content">
+                    <form id="form" name="form" th:method="post" th:object="${categoryCreateForm}">
+                        <div>
+                            <label for="name">카테고리명</label>
+                            <input type="text" id="name" name="name" placeholder="카테고리명">
+                            <p class="text-error" id="nameErr"></p>
+                        </div>
+                        <div>
+                            <label for="name">활성화</label>
+                            <input type="checkbox" id="isDel" th:field="*{isDel}">
+                        </div>
+                        <div>
+                            <input type="button" value="등록" onclick="createCategory()">
+                            <input type="button" value="취소" class="close-btn">
+                        </div>
+                        <p id="globalErr" class="text-error"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script th:src="@{/js/category.js}"></script>
+</body>
+</html>

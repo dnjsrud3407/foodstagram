@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <link th:href="@{/css/common.css}" rel="stylesheet" />
+    <link th:href="@{/css/food.css}" rel="stylesheet" />
+</head>
+<style>
+</style>
+<body>
+    게시글 보기
+    <form name="form" th:action th:method="get">
+        <section th:object="${foodSearchDto}" th:method="post">
+            <input type="search" th:field="*{searchText}" placeholder="맛집 이름, 주소 검색">
+            <input type="button" value="검색" onclick="listSearch()">
+            <table>
+                <tr>
+                    <td>카테고리</td>
+                    <td>
+                        <span th:each="category : ${categories}">
+                            <input type="checkbox" th:field="*{categoryIds}" th:value="${category.id}" onclick="listSearch()">
+                            <label th:for="${#ids.prev('categoryIds')}" th:text="${category.name}"></label>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>방문일</td>
+                    <td>
+                        <span style="margin-right: 20px;">
+                            <a id="visitDateAll" onclick="visitDateAll()">전체</a>
+                        </span>
+                        <span style="margin-right: 20px;">
+                            <a id="visitDateSpec" onclick="visitDateSpec()">상세 검색</a>
+                            <span id="visitDateSpan">
+                                <input type="date" th:field="*{visitDateStart}" max="2200-12-31"> ~
+                                <input type="date" th:field="*{visitDateEnd}" max="2200-12-31">
+                                <input type="button" id="visitDateBtn" value="적용" onclick="listSearch()">
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>리스트</td>
+                    <td>
+                        <select id="listId" th:field="*{listId}" onchange="listSearch()">
+                            <option value="0">전체보기</option>
+                            <option th:each="list : ${lists}"
+                                    th:value="${list.id}"
+                                    th:text="${list.name}" />
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>정렬순서</td>
+                    <td>
+                        <span th:each="order : ${T(com.foodstagram.service.FoodSearchOrder).values()}">
+                            <label>
+                                <input type="radio" th:field="*{orderBy}" th:value="${order}" th:text="${order.label}" onclick="listSearch()">
+                            </label>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="link" onclick="reset()">↺ 옵션 초기화</td>
+                </tr>
+            </table>
+        </section>
+        <input type="button" value="맛집 등록" th:onclick="|location.href='@{/food/create}'|">
+        <section>
+            <!-- foodList -->
+            <div style="width: 80%; margin: auto;">
+                <div class="preview" th:each="food : ${foodList}" th:onclick="|location.href='@{/food/{foodId} (foodId=${food.id})}'|" style="cursor: pointer;">
+                    <h5 th:text="${food.storeName}" style="margin: 10px">가게 이름</h5>
+                    <img id="preview-thumbnail" class="w200" th:src="|/picture/${food.foodPictureDtos[0].storedFileName}|"><br>
+                    <p style="margin: 5px 0 0 8px; text-align: left;">
+                        <span style="color: #ffc107">★</span>
+                        <span th:text="${food.score}">점수</span>
+                        <span th:text="${food.title}">글 제목</span>
+                    </p>
+                    <p th:text="${food.categoryNameStr}" style="margin: 2px 0 0 8px; text-align: left;">카테고리</p>
+                    <p th:text="${food.visitDate}" style="text-align: right; margin: 2px 8px 10px;">방문날짜</p>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+            <br><br>
+        </section>
+        <section>
+            <div style="text-align: center;" th:with="size = ${paging.size}">
+                <input type="hidden" name="size" th:value="${size}">
+                <input type="hidden" name="page" id="page">
+                <span class="mr1r" th:with="num = ${paging.startNum - 1}">
+                    <a th:onclick="|listSearch('${num}')|"
+                       th:class="${paging.first} ? 'disabled link' : 'link'" >&lt;</a>
+                </span>
+                <span th:each="num : ${#numbers.sequence(paging.startNum, paging.endNum)}" class="mr1r">
+                    <span th:if="${num == paging.currNum}" th:text="${num + 1}" class="fw-bold cursor-default"></span>
+                    <span th:if="${num != paging.currNum}">
+                        <a th:onclick="|listSearch('${num}')|"
+                           th:text="${num + 1}" class="link">1</a>
+                    </span>
+                </span>
+                <span th:with="num = ${paging.endNum + 1}">
+                    <a th:onclick="|listSearch('${num}')|"
+                       th:class="${paging.last} ? 'disabled link' : 'link'">&gt;</a>
+                </span>
+            </div>
+        </section>
+    </form>
+    <script th:src="@{/js/food.js}"></script>
+    <script>
+        var visitDateStart = "[[${foodSearchDto.visitDateStart}]]";
+        var visitDateEnd = "[[${foodSearchDto.visitDateEnd}]]";
+
+        // 날짜에 값이 없다면 "전체"가 활성화
+        if(visitDateStart == "" && visitDateEnd == "") {
+            document.getElementById('visitDateAll').classList.remove("link");
+
+            document.getElementById('visitDateSpec').classList.add("link");
+            document.getElementById('visitDateSpan').style.display = "none";
+        } // 날짜에 값이 있다면 "날짜선택 input"이 활성화
+        else {
+            document.getElementById('visitDateAll').classList.add("link");
+
+            document.getElementById('visitDateSpec').classList.remove("link");
+            document.getElementById('visitDateSpan').style.display = "inline";
+        }
+    </script>
+</body>
+</html>

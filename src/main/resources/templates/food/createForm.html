@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <link th:href="@{/css/common.css}" rel="stylesheet" />
+    <link th:href="@{/css/food.css}" rel="stylesheet" />
+</head>
+<body>
+    게시글 등록
+    <form name="form" th:action th:object="${foodCreateForm}" th:method="post" enctype="multipart/form-data">
+        <div>
+            <label for="storeName">가게이름</label>
+            <input type="text" id="storeName" th:field="*{storeName}" placeholder="가게명" required
+                   th:classappend="${#fields.hasErrors('storeName')} ? 'fieldError'">
+            <p class="text-error" th:if="${#fields.hasErrors('storeName')}" th:errors="*{storeName}"></p>
+        </div>
+        <div>
+            <span>카테고리</span>
+            <span th:each="category : ${categories}">
+                <input type="checkbox" th:field="*{categoryIds}" th:value="${category.id}">
+                <label th:for="${#ids.prev('categoryIds')}" th:text="${category.name}"></label>
+            </span>
+            <p class="text-error" th:if="${#fields.hasErrors('categoryIds')}" th:errors="*{categoryIds}"></p>
+            <p id="categoryErr" class="text-error"></p>
+        </div>
+        <div>
+            <label for="visitDate">방문날짜</label>
+            <input type="date" id="visitDate" th:field="*{visitDate}" placeholder="방문날짜" max="2200-12-31" required
+                   th:classappend="${#fields.hasErrors('visitDate')} ? 'fieldError'">
+            <p class="text-error" th:each="error, stat : ${#fields.errors('visitDate')}" th:text="${error}" th:if="${stat.last}"></p>
+        </div>
+
+        <div>
+            <label for="score">별점</label>
+            <div class="rating_box">
+                <span class="score">
+                  ★★★★★
+                  <span th:style="|width: ${foodCreateForm.score * 20}%|">★★★★★</span>
+                  <input type="range" id="score" name="score" th:field="*{score}"
+                         oninput="drawScore(this)" step="0.5" min="0.5" max="5" value="0.5">
+                </span>
+            </div>
+            <span id="scoreDisplay" th:text="${foodCreateForm.score}"></span>
+            <p class="text-error" th:each="error, stat : ${#fields.errors('score')}" th:text="${error}" th:if="${stat.last}"></p>
+        </div>
+        <div>
+            <label for="listId">리스트</label>
+            <select id="listId" th:field="*{listId}">
+                <option value="0">리스트 미선택</option>
+                <option th:each="list : ${lists}"
+                        th:value="${list.id}"
+                        th:text="${list.name}" />
+            </select>
+        </div>
+        <div>
+            <label for="title">게시글 제목</label>
+            <input type="text" id="title" th:field="*{title}" required
+                   th:classappend="${#fields.hasErrors('title')} ? 'fieldError'">
+            <p class="text-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+        </div>
+        <div>
+            <textarea th:field="*{content}" required th:classappend="${#fields.hasErrors('content')} ? 'fieldError'"></textarea>
+            <p class="text-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+        </div>
+        <div>
+            <label for="address">주소</label>
+            <input type="text" id="address" th:field="*{address}" readonly disabled>
+            <input type="hidden" id="latitude" th:field="*{latitude}">
+            <input type="hidden" id="longitude" th:field="*{longitude}">
+            <input type="button" value="주소찾기" onclick="findAddress()">
+        </div>
+        <div>
+            <!-- Thumbnail 이미지 -->
+            <div style="display: inline-block; float: left; width: 450px;">
+                <label for="thumbnail">사진 등록</label>
+                <div class="thumbDiv">
+                    <div class="preview">
+                        <img id="preview-thumbnail" class="w200" src="https://dummyimage.com/200x250/fff/000&text=image">
+                    </div>
+                    <label class="fileLabel">
+                        <input type="file" id="thumbnail" th:field="*{thumbnail}" accept="image/jpeg, image/png, image/gif" required
+                               onchange="readImage(this)" class="file_real">
+                        <input type="text" id="thumbnail-fake" placeholder="*.jpg/png/gif Only" readonly class="file_fake" tabindex="-1">
+                        <span class="button">파일 선택</span>
+                    </label>
+                    <p class="text-error" th:if="${#fields.hasErrors('thumbnail')}" th:errors="*{thumbnail}"></p>
+                </div>
+            </div>
+            <!-- 추가 FoodPicture -->
+            <div style="display: inline-block; float: left;">
+                <div class="preview" th:each="i : ${#numbers.sequence(1,4)}">
+                    <img th:id="|preview-picture${i}|" class="w200" src="https://dummyimage.com/200x250/fff/000&text=image">
+                </div>
+                <label class="fileLabel">
+                    <input type="file" th:field="*{foodPictures}" multiple accept="image/jpeg, image/png, image/gif"
+                           onchange="readMultipleImage(this)" class="file_real">
+                    <input type="text" id="picture-fake" placeholder="*.jpg/png/gif Only" readonly class="file_fake" tabindex="-1">
+                    <span class="button">파일 선택</span>
+                </label>
+                <p class="text-error" th:if="${#fields.hasErrors('foodPictures')}" th:errors="*{foodPictures}"></p>
+                <input type="button" value="파일 전체 삭제" onclick="foodPicturesDelete()">
+            </div>
+            <div style="clear: both;"></div>
+            <p id="foodPicturesErr" class="text-error"></p>
+            <p id="globalErr" class="text-error"></p>
+            <br><br>
+        </div>
+        <div>
+            <input type="button" value="등록" onclick="checkForm(true)">
+            <input type="button" value="취소" onclick="javascript:history.back();">
+        </div>
+    </form>
+    <script th:src="@{/js/food.js}"></script>
+</body>
+</html>

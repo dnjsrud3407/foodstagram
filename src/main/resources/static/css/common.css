@@ -1,0 +1,51 @@
+.w200 {
+  width: 200px;
+}
+
+.m3p {
+  margin: 3% !important;
+}
+
+.mr1r {
+  margin-right: 1rem;
+}
+
+/* font 속성 */
+.fw-bold {
+  font-weight: bold;
+}
+
+/* cursor 속성 */
+.cursor-default {
+  cursor: default;
+}
+
+.none {
+  display: none;
+}
+
+.fieldError {
+  border-color: #bd2130;
+}
+
+.text-error {
+  color: #bd2130;
+  font-size: 0.8rem;
+  margin: 0.3rem 0 0.6rem 0.3rem
+}
+
+.link {
+  opacity: 0.65;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.link:hover {
+  opacity: 1;
+  color: inherit;
+}
+
+.disabled {
+  pointer-events: none;
+}

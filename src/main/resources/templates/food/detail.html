@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <link th:href="@{/css/common.css}" rel="stylesheet" />
+    <link th:href="@{/css/food.css}" rel="stylesheet" />
+</head>
+<style>
+    .map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
+    .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
+    .map_wrap {position:relative;width:100%;}
+    .bg_white {background:#fff;}
+</style>
+<body>
+    <div>
+        <input type="button" value="목록으로" th:onclick="|location.href='@{/food/list}'|">
+        <input type="button" value="수정" th:onclick="|location.href='@{/food/modify/{foodId} (foodId=${food.id})}'|">
+        <input type="button" value="삭제" th:onclick="|location.href='@{/food/delete/{foodId} (foodId=${food.id})}'|">
+    </div>
+    <form name="form" th:action th:object="${food}" th:method="post" enctype="multipart/form-data">
+        <div>
+            <label for="storeName">가게이름</label>
+            <span id="storeName" th:text="*{storeName}"></span>
+        </div>
+        <div>
+            <span>카테고리</span>
+            <span th:each="category : ${food.categoryDtos}">
+                <span th:text="${category.name}"></span>
+            </span>
+        </div>
+        <div>
+            <label for="visitDate">방문날짜</label>
+            <span id="visitDate" th:text="${#temporals.format(food.visitDate, 'yyyy-MM-dd')}"></span>
+        </div>
+        <div>
+            <label for="score">별점</label>
+            <div class="rating_box">
+                <span class="score">
+                  ★★★★★
+                  <span th:style="|width: ${food.score * 20}%|">★★★★★</span>
+                  <input type="range" id="score" name="score" th:field="*{score}" readonly>
+                </span>
+            </div>
+            <span id="scoreDisplay" th:text="${food.score}"></span>
+        </div>
+        <div>
+            <label for="list">리스트</label>
+            <span id="list" th:text="${food.listsDto.name}"></span>
+        </div>
+        <div>
+            <label for="title">게시글 제목</label>
+            <span id="title" th:text="*{title}"></span>
+        </div>
+        <div>
+            <textarea th:text="*{content}" readonly></textarea>
+        </div>
+        <div>
+            <label for="address">주소</label>
+            <div class="map_wrap" id="map_wrap">
+                <div id="map" style="width:500px;height:400px;"></div>
+            </div>
+            <span id="address" th:text="*{address}"></span>
+        </div>
+        <div>
+            <!-- Thumbnail 이미지 -->
+            <div style="display: inline-block; float: left; width: 450px;">
+                <div class="thumbDiv">
+                    <div class="preview" th:each="foodPicture : ${food.foodPictureDtos}">
+                        <img id="preview-thumbnail" class="w200" th:src="|/picture/${foodPicture.storedFileName}|">
+                    </div>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+            <br><br>
+        </div>
+    </form>
+    <script type="text/javascript" th:src="|//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoAPI}&libraries=services|"></script>
+    <script th:inline="javascript">
+        // API 주소 설정이 되어 있는지 확인
+        var latitude = "[[${food.latitude}]]";
+
+        if(latitude == "" || latitude == "null") {
+            document.getElementById('map_wrap').innerHTML = "주소를 입력하지 않았습니다.";
+            document.getElementById('map_wrap').classList.add("m3p");
+        }
+        else {
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                mapOptions = {
+                center: new kakao.maps.LatLng([[${food.latitude}]], [[${food.longitude}]]),
+                level: 3
+            };
+
+            // 지도를 생성합니다
+            var map = new kakao.maps.Map(mapContainer, mapOptions);
+
+            // 마커를 생성합니다
+            var marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng([[${food.latitude}]], [[${food.longitude}]]),
+                text: '텍스트를 표시할 수 있어요!'
+            });
+
+            marker.setMap(map);
+
+            var storeName = [[${food.storeName}]];
+            var content = '<div style="padding:5px;z-index:1;">' + storeName + '</div>';
+
+            // 인포윈도우를 생성합니다
+            var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
+        }
+    </script>
+</body>
+</html>
