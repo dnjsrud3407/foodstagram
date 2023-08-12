@@ -66,7 +66,7 @@
         </div>
         <div>
             <label for="address">주소</label>
-            <input type="text" id="address" th:field="*{address}" readonly disabled>
+            <input type="text" id="address" th:field="*{address}" readonly>
             <input type="hidden" id="latitude" th:field="*{latitude}">
             <input type="hidden" id="longitude" th:field="*{longitude}">
             <input type="button" value="주소찾기" onclick="findAddress()">
