@@ -29,6 +29,10 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user")
     private List<Food> foods = new ArrayList<>();
 
+    private String role; // ROLE_USER, ROLE_ADMIN
+
+    private String oauth;
+
     private Boolean isDel;
 
     private void setLoginId(String loginId) {
@@ -43,12 +47,16 @@ public class User extends BaseTimeEntity {
         this.email = email;
     }
 
-    private void setDel(Boolean del) {
-        isDel = del;
+    private void setRole(String role) {
+        this.role = role;
     }
 
-    public void delete() {
-        this.isDel = true;
+    private void setOauth(String oauth) {
+        this.oauth = oauth;
+    }
+
+    private void setDel(Boolean del) {
+        isDel = del;
     }
 
     //== 생성 메서드 ==//
@@ -57,6 +65,19 @@ public class User extends BaseTimeEntity {
         user.setLoginId(loginId);
         user.setPassword(password);
         user.setEmail(email);
+        user.setRole("ROLE_USER");
+        user.setDel(false);
+
+        return user;
+    }
+
+    public static User createUser(String loginId, String password, String email, String provider) {
+        User user = new User();
+        user.setLoginId(loginId);
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setRole("ROLE_USER");
+        user.setOauth(provider);
         user.setDel(false);
 
         return user;
@@ -67,5 +88,8 @@ public class User extends BaseTimeEntity {
         this.password = password;
     }
 
+    public void deleteUser() {
+        this.isDel = true;
+    }
 
 }
