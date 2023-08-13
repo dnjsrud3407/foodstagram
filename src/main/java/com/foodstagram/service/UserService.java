@@ -1,13 +1,12 @@
 package com.foodstagram.service;
 
 import com.foodstagram.dto.UserJoinDto;
-import com.foodstagram.dto.UserLoginDto;
 import com.foodstagram.entity.User;
 import com.foodstagram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,7 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
     private final MessageSource ms;
 
     /**
@@ -34,6 +33,15 @@ public class UserService {
 
         String encodedPw = passwordEncoder.encode(userJoinDto.getPassword());
         User user = User.createUser(userJoinDto.getLoginId(), encodedPw, userJoinDto.getEmail());
+
+        User savedUser = userRepository.save(user);
+        return savedUser.getId();
+    }
+
+    @Transactional
+    public Long joinOauth(UserJoinDto userJoinDto, String provider) {
+        String encodedPw = passwordEncoder.encode(userJoinDto.getPassword());
+        User user = User.createUser(userJoinDto.getLoginId(), encodedPw, userJoinDto.getEmail(), provider);
 
         User savedUser = userRepository.save(user);
         return savedUser.getId();
@@ -77,25 +85,8 @@ public class UserService {
         return findedUser != null ? findedUser.getId() : null;
     }
 
-    /**
-     * 로그인
-     * @param userLoginDto
-     * @return
-     */
-    public User login(UserLoginDto userLoginDto) {
-        User findUser = userRepository.findByLoginId(userLoginDto.getLoginId()).orElseThrow(
-                () -> new IllegalStateException("아이디가 틀렸습니다.")
-        );
-
-        if(findUser.getIsDel() == true) {
-            throw new IllegalStateException("탈퇴한 회원입니다.");
-        }
-
-        if(!passwordEncoder.matches(userLoginDto.getPassword(), findUser.getPassword())) {
-            throw new IllegalStateException("비밀번호가 틀렸습니다.");
-        }
-
-        return findUser;
+    public User findUser(String loginId) {
+        return userRepository.findByLoginId(loginId).orElse(null);
     }
 
     /**
@@ -121,7 +112,7 @@ public class UserService {
      */
     @Transactional
     public void changePassword(String loginId, String newPassword, String email) {
-        // TODO: 이메일 인증
+        // 만약 oauth 가 null 이 아니면 비밀번호 변경 X
         User findUser = userRepository.findByLoginIdAndEmailAndIsDel(loginId, email, false);
         if(findUser != null) {
             String encodedPw = passwordEncoder.encode(newPassword);
@@ -144,7 +135,6 @@ public class UserService {
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }
 
-        findUser.delete();
+        findUser.deleteUser();
     }
-
 }
