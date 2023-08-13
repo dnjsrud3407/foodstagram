@@ -1,5 +1,6 @@
 package com.foodstagram.controller;
 
+import com.foodstagram.config.auth.PrincipalDetails;
 import com.foodstagram.controller.form.FoodCreateForm;
 import com.foodstagram.controller.form.FoodModifyForm;
 import com.foodstagram.dto.*;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,9 +49,10 @@ public class FoodController {
     }
 
     @GetMapping("/create")
-    public String createFood(Model model) {
+    public String createFood(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         log.info("createFood");
-        List<ListsDto> lists = listService.findLists(24L);
+        Long userId = principalDetails.getUser().getId();
+        List<ListsDto> lists = listService.findLists(userId);
 
         model.addAttribute("foodCreateForm", new FoodCreateForm());
         model.addAttribute("foodPictureDtos", new FoodPictureDto());
@@ -60,13 +63,15 @@ public class FoodController {
 
     @PostMapping("/create")
     public String createFood(@Validated @ModelAttribute FoodCreateForm foodCreateForm, BindingResult result,
-                             Model model, RedirectAttributes redirectAttributes) throws IOException {
+                             @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, RedirectAttributes redirectAttributes) throws IOException {
+        Long userId = principalDetails.getUser().getId();
+
         // 유효성 검사
         validate(result);
         validateFile(foodCreateForm.getThumbnail(), foodCreateForm.getFoodPictures(), result);
 
         if(result.hasErrors()) {
-            List<ListsDto> lists = listService.findLists(24L);
+            List<ListsDto> lists = listService.findLists(userId);
 
             model.addAttribute("lists", lists);
 
@@ -79,7 +84,7 @@ public class FoodController {
         FoodCreateDto foodCreateDto = new FoodCreateDto(foodCreateForm);
 
         // 데이터 베이스 저장
-        Long foodId = foodService.createFood(foodCreateDto, 24L, foodPictureDtos);
+        Long foodId = foodService.createFood(foodCreateDto, userId, foodPictureDtos);
         redirectAttributes.addAttribute("foodId", foodId);
 
         return "redirect:/food/{foodId}";
@@ -180,12 +185,13 @@ public class FoodController {
      * @return
      */
     @GetMapping("/modify/{foodId}")
-    public String modifyFood(@PathVariable Long foodId, Model model) {
+    public String modifyFood(@PathVariable Long foodId, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         log.info("modifyFood");
+        Long userId = principalDetails.getUser().getId();
         FoodDto foodDto = foodService.findFood(foodId);
         FoodModifyForm foodModifyForm = new FoodModifyForm(foodDto);
 
-        List<ListsDto> lists = listService.findLists(24L);
+        List<ListsDto> lists = listService.findLists(userId);
 
         model.addAttribute("foodModifyForm", foodModifyForm);
         model.addAttribute("lists", lists);
@@ -195,7 +201,9 @@ public class FoodController {
 
     @PostMapping("/modify/{foodId}")
     public String modifyFood(@Validated @ModelAttribute FoodModifyForm foodModifyForm, BindingResult result,
-                             Model model, @PathVariable Long foodId) throws IOException {
+                             @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, @PathVariable Long foodId) throws IOException {
+        Long userId = principalDetails.getUser().getId();
+
         // 유효성 검사
         validate(result);
 
@@ -224,7 +232,7 @@ public class FoodController {
         }
 
         if(result.hasErrors()) {
-            List<ListsDto> lists = listService.findLists(24L);
+            List<ListsDto> lists = listService.findLists(userId);
 
             model.addAttribute("lists", lists);
 
@@ -299,9 +307,10 @@ public class FoodController {
     }
 
     @GetMapping("/list")
-    public String list(FoodSearchDto foodSearchDto,
-                       @PageableDefault(page = 0, size = 10) Pageable pageable, Model model) {
+    public String list(FoodSearchDto foodSearchDto, @PageableDefault(page = 0, size = 10) Pageable pageable,
+                       @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         log.info("list");
+        Long userId = principalDetails.getUser().getId();
 
         if(foodSearchDto == null) {
             foodSearchDto = new FoodSearchDto();
@@ -313,11 +322,11 @@ public class FoodController {
             changeVisitDate(foodSearchDto);
         }
 
-        Page<FoodDto> foodList = foodService.searchFoods(foodSearchDto, 24L, pageable);
+        Page<FoodDto> foodList = foodService.searchFoods(foodSearchDto, userId, pageable);
 
         MyPage paging = new MyPage(foodList);
 
-        List<ListsDto> lists = listService.findLists(24L);
+        List<ListsDto> lists = listService.findLists(userId);
 
         model.addAttribute("totalCount", foodList.getTotalElements());
         model.addAttribute("lists", lists);
