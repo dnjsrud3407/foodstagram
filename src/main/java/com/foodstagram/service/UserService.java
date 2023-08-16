@@ -112,12 +112,24 @@ public class UserService {
      */
     @Transactional
     public void changePassword(String loginId, String newPassword, String email) {
-        // 만약 oauth 가 null 이 아니면 비밀번호 변경 X
         User findUser = userRepository.findByLoginIdAndEmailAndIsDel(loginId, email, false);
         if(findUser != null) {
             String encodedPw = passwordEncoder.encode(newPassword);
             findUser.changePassword(encodedPw);
         }
+    }
+
+    /**
+     * 마이 페이지에서 비밀번호 변경
+     * @param userId
+     * @param newPassword
+     */
+    @Transactional
+    public void changePassword(Long userId, String newPassword) {
+        User findUser = userRepository.findById(userId).orElseThrow(
+                () -> new NoSuchElementException());
+
+        findUser.changePassword(passwordEncoder.encode(newPassword));
     }
 
     /**

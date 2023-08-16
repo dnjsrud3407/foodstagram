@@ -18,5 +18,5 @@ public interface FoodRepository extends JpaRepository<Food, Long>, FoodQueryRepo
     int countIsDelFalseByUserIdAndListId(@Param("userId") Long userId, @Param("listId") Long listId);
 
     @Query("select count(f.id) from Food f where f.user.id = :userId and f.isDel = false")
-    Optional<Long> countFoodByUserId(Long userId);
+    Optional<Long> countFoodByUserId(@Param("userId") Long userId);
 }
