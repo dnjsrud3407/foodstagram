@@ -113,4 +113,13 @@ public class JwtTokenService {
     public Cookie createCookieToken(String cookieName, String jwtToken) throws UnsupportedEncodingException {
         return CookieUtil.createTokenCookie(cookieName, jwtToken, JwtProperties.COOKIE_MAX_AGE);
     }
+
+    /**
+     * Redis 에 저장된 refresh 토큰 값 변경
+     * @param loginId
+     * @param refreshToken
+     */
+    public void changeRefreshToken(String loginId, String refreshToken) {
+        redisService.saveRefreshToken(loginId, refreshToken);
+    }
 }

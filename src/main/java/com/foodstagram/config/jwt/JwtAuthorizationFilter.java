@@ -67,8 +67,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 refreshTokenCookie = Arrays.stream(request.getCookies())
                         .filter(cookie -> cookie.getName().equals(JwtProperties.REFRESH_TOKEN_COOKIE_NAME))
                         .findFirst().orElseThrow(() -> new JWTVerificationException(ms.getMessage("verification.refreshToken", null, null)));
+            } else {
+                chain.doFilter(request, response);
+                return;
             }
-
 
             // refreshTokenCookie 토큰이 조작, 만료되었을 때 -> 로그인 페이지 이동
             String refreshToken = CookieUtil.getAccessToken(refreshTokenCookie);
@@ -85,18 +87,22 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             String loginId = jwtTokenService.getLoginId(accessToken);
             jwtTokenService.checkEqualRedis(loginId, refreshToken);
 
-            // refreshToken 7일 이내라면 refresh 재발급 후 쿠키에 저장
+            // refreshToken 7일 이내라면 재발급 후 쿠키에 저장, Redis 값 변경
             if(jwtTokenService.isNeedReCreate(refreshToken)) {
                 refreshTokenCookie.setMaxAge(0); // 이전 쿠키는 만료시킴
+                response.addCookie(refreshTokenCookie);
 
                 refreshToken = jwtTokenService.createRefreshToken();
                 refreshTokenCookie = jwtTokenService.createCookieToken(JwtProperties.REFRESH_TOKEN_COOKIE_NAME, refreshToken);
                 response.addCookie(refreshTokenCookie);
+
+                jwtTokenService.changeRefreshToken(loginId, refreshToken);
             }
 
             // accessToken 이 만료되었다면 재발급 후 쿠키에 저장
             if(jwtTokenService.isExpired(accessToken)) {
                 accessTokenCookie.setMaxAge(0); // 이전 쿠키는 만료시킴
+                response.addCookie(accessTokenCookie);
 
                 accessToken = jwtTokenService.createAccessToken(loginId);
                 accessTokenCookie = jwtTokenService.createCookieToken(JwtProperties.ACCESS_TOKEN_COOKIE_NAME, accessToken);
