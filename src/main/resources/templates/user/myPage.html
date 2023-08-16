@@ -14,8 +14,11 @@
     이메일
     <span th:text="${user.email}"></span>
   </p>
-  <p th:if="${#strings.isEmpty(user.oauth)}" id="pwTag">
+  <p th:if="${#strings.isEmpty(user.oauth)}">
     <a th:href="@{/user/changePw}" class="link">비밀번호 변경</a>
+  </p>
+  <p>
+    <a th:href="@{/user/delete}" class="link">회원 탈퇴</a>
   </p>
 </section>
 <hr>

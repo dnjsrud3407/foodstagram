@@ -21,6 +21,10 @@ public interface FoodCategoryRepository extends JpaRepository<FoodCategory, Long
     @Query("update FoodCategory fc set fc.isDel = true where fc.food.id = :foodId")
     int updateIsDelTrueByFoodId(@Param("foodId") Long foodId);
 
+    @Modifying
+    @Query("update FoodCategory fc set fc.isDel = true where fc.food.id in :foodIds")
+    void updateIsDelTrueByFoodIds(@Param("foodIds") List<Long> foodIds);
+
     @Query("select fc.category.id from FoodCategory fc where fc.food.id = :foodId")
     List<Long> findCategoryIdByFoodId(@Param("foodId") Long foodId);
 

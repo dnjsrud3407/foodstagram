@@ -1,6 +1,8 @@
 package com.foodstagram.controller;
 
 import com.foodstagram.config.auth.PrincipalDetails;
+import com.foodstagram.config.jwt.JwtTokenService;
+import com.foodstagram.config.redis.RedisService;
 import com.foodstagram.controller.form.UserChangePwForm;
 import com.foodstagram.controller.form.UserJoinForm;
 import com.foodstagram.controller.validation.ValidationSequence;
@@ -11,6 +13,8 @@ import com.foodstagram.error.ErrorResult;
 import com.foodstagram.service.FoodService;
 import com.foodstagram.service.ListService;
 import com.foodstagram.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -212,6 +216,42 @@ public class UserController {
         if(!userChangePwForm.getNewPassword().equals(userChangePwForm.getNewPasswordConfirm())) {
             result.rejectValue("newPasswordConfirm", "equal");
         }
+    }
+
+    /**
+     * 회원 탈퇴하기
+     * @return
+     */
+    @GetMapping("/delete")
+    public String deleteForm() {
+        return "user/deleteForm";
+    }
+
+    /**
+     * 회원 탈퇴하기
+     * - 탈퇴 후 로그아웃 하기
+     * @param deleteCheck
+     * @param principalDetails
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping("/delete")
+    public String delete(@RequestParam(name = "deleteCheck") Boolean deleteCheck,
+                         @AuthenticationPrincipal PrincipalDetails principalDetails, HttpServletRequest request, HttpServletResponse response) {
+        log.info("deleteCheck: {}", deleteCheck);
+        // 탈퇴 동의 미체크 시
+        if(!deleteCheck) {
+            return "user/deleteForm";
+        }
+
+        User user = principalDetails.getUser();
+
+        // 탈퇴 작업
+        userService.deleteUser(user.getId());
+
+        // 로그아웃 하기
+        return "redirect:/logout";
     }
 
 }

@@ -20,6 +20,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final FoodService foodService;
+    private final ListService listService;
     private final MessageSource ms;
 
     /**
@@ -135,18 +137,19 @@ public class UserService {
     /**
      * 회원 탈퇴
      * @param userId
-     * @param password
      */
     @Transactional
-    public void deleteUser(Long userId, String password) {
+    public void deleteUser(Long userId) {
         User findUser = userRepository.findById(userId).orElseThrow(
                 () -> new NoSuchElementException());
 
-        // 비밀번호가 일치하지 않으면 오류 발생
-        if(findUser.getIsDel().equals(true) || !passwordEncoder.matches(password, findUser.getPassword())) {
-            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
-        }
-
+        // user table 수정
         findUser.deleteUser();
+
+        // food, food_category, food_picture 비활성화
+        foodService.deleteFoodByDeleteUser(userId);
+
+        // list 비활성화
+        listService.deleteListByDeleteUser(userId);
     }
 }

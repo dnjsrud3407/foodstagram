@@ -130,4 +130,12 @@ public class ListService {
 
         listRepository.updateIsDelTrueByUserIdAndListId(userId, listId);
     }
+
+    /**
+     * 회원탈퇴 시 리스트 삭제
+     * @param userId
+     */
+    public void deleteListByDeleteUser(Long userId) {
+        listRepository.updateIsDelTrueByUserId(userId);
+    }
 }

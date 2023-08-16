@@ -21,4 +21,9 @@ public interface ListRepository extends JpaRepository<Lists, Long>, ListQueryRep
 
     @Query("select count(l.id) from Lists l where l.user.id = :userId and l.isDel = false")
     Optional<Long> countListsByUserId(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("update Lists l set l.isDel = true where l.user.id = :userId")
+    void updateIsDelTrueByUserId(@Param("userId") Long userId);
+
 }

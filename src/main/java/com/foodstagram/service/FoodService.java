@@ -211,4 +211,23 @@ public class FoodService {
         foodPictureRepository.updateIsDelTrueByFoodId(foodId);
     }
 
+    /**
+     * 회원탈퇴 시 게시글 삭제
+     * @param userId
+     */
+    @Transactional
+    public void deleteFoodByDeleteUser(Long userId) {
+        // food 게시글 id 가져오기
+        List<Long> foodIds = foodRepository.findFoodIdByUserId(userId);
+
+        // foodCategory 비활성화
+        foodCategoryRepository.updateIsDelTrueByFoodIds(foodIds);
+
+        // foodPicture 비활성화
+        foodPictureRepository.updateIsDelTrueByFoodIds(foodIds);
+
+        // food 게시글 비활성화
+        foodRepository.updateIsDelTrueByUserId(userId);
+    }
+
 }

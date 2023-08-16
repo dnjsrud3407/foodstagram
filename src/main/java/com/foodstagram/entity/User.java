@@ -89,6 +89,9 @@ public class User extends BaseTimeEntity {
     }
 
     public void deleteUser() {
+        this.loginId = null;
+        this.password = null;
+        this.email = null;
         this.isDel = true;
     }
 

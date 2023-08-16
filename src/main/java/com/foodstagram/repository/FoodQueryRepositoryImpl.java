@@ -17,6 +17,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.foodstagram.entity.QCategory.category;
 import static com.foodstagram.entity.QFood.food;
@@ -173,4 +174,17 @@ public class FoodQueryRepositoryImpl implements FoodQueryRepository {
         }
     }
 
+    /**
+     * 회원이 작성한 게시글 id 가져오기
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Long> findFoodIdByUserId(Long userId) {
+        return queryFactory
+                .select(food.id)
+                .from(food)
+                .where(food.user.id.eq(userId), food.isDel.eq(false))
+                .fetch().stream().collect(Collectors.toList());
+    }
 }
