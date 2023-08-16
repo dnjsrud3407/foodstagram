@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -26,6 +27,7 @@ import java.util.Arrays;
 /**
  * security 필터 중 BasicAuthenticationFilter 가 있음 - 권한이나 인증이 필요한 특정 주소를 요청했을 때 거치는 필터.
  */
+@Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private MessageSource ms;
@@ -89,8 +91,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             // refreshToken 7일 이내라면 재발급 후 쿠키에 저장, Redis 값 변경
             if(jwtTokenService.isNeedReCreate(refreshToken)) {
-                refreshTokenCookie.setMaxAge(0); // 이전 쿠키는 만료시킴
-                response.addCookie(refreshTokenCookie);
+                // 이전 쿠키는 만료시킴
+                CookieUtil.expireCookie(refreshTokenCookie, response);
 
                 refreshToken = jwtTokenService.createRefreshToken();
                 refreshTokenCookie = jwtTokenService.createCookieToken(JwtProperties.REFRESH_TOKEN_COOKIE_NAME, refreshToken);
@@ -101,8 +103,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             // accessToken 이 만료되었다면 재발급 후 쿠키에 저장
             if(jwtTokenService.isExpired(accessToken)) {
-                accessTokenCookie.setMaxAge(0); // 이전 쿠키는 만료시킴
-                response.addCookie(accessTokenCookie);
+                // 이전 쿠키는 만료시킴
+                CookieUtil.expireCookie(accessTokenCookie, response);
 
                 accessToken = jwtTokenService.createAccessToken(loginId);
                 accessTokenCookie = jwtTokenService.createCookieToken(JwtProperties.ACCESS_TOKEN_COOKIE_NAME, accessToken);
@@ -136,6 +138,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         } catch (UnsupportedEncodingException e) {
             chain.doFilter(request, response);
         } catch (Exception e) {
+            if(requestURI.equals("/")) {
+                chain.doFilter(request, response);
+                return;
+            }
+
+            log.error(e.getMessage());
             response.sendRedirect("/loginForm");
         }
 

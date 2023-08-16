@@ -1,6 +1,7 @@
 package com.foodstagram.config.jwt;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -32,5 +33,15 @@ public class CookieUtil {
      */
     public static String getAccessToken(Cookie cookie) throws UnsupportedEncodingException {
         return URLDecoder.decode(cookie.getValue(), "UTF-8");
+    }
+
+    /**
+     * 쿠키 만료 시키기
+     * @param cookie
+     * @param response
+     */
+    public static void expireCookie(Cookie cookie, HttpServletResponse response) {
+        cookie.setMaxAge(0); // 이전 쿠키는 만료시킴
+        response.addCookie(cookie);
     }
 }

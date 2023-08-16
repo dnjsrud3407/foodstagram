@@ -6,10 +6,14 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.foodstagram.config.redis.RedisService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Date;
 
 @Service
@@ -121,5 +125,24 @@ public class JwtTokenService {
      */
     public void changeRefreshToken(String loginId, String refreshToken) {
         redisService.saveRefreshToken(loginId, refreshToken);
+    }
+
+    /**
+     * 토큰 만료시키기
+     * @param request
+     * @param response
+     */
+    public void expireToken(HttpServletRequest request, HttpServletResponse response) {
+        Cookie accessTokenCookie = Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(JwtProperties.ACCESS_TOKEN_COOKIE_NAME))
+                .findFirst().orElse(null);
+
+        Cookie refreshTokenCookie = Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(JwtProperties.REFRESH_TOKEN_COOKIE_NAME))
+                .findFirst().orElse(null);
+
+        if(accessTokenCookie != null) CookieUtil.expireCookie(accessTokenCookie, response);
+
+        if(refreshTokenCookie != null) CookieUtil.expireCookie(refreshTokenCookie, response);
     }
 }
