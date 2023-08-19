@@ -51,10 +51,10 @@ public class FoodService {
      * @return
      */
     public Page<FoodDto> searchFoods(FoodSearchDto foodSearchDto, Long userId, Pageable pageable) {
+        // 전체보기 클릭시
         if(foodSearchDto.getListId() == 0) {
             foodSearchDto.setListId(null);
         }
-
 
         Page<FoodDto> foodDtos = foodRepository.findFoodDtoByFoodSearch(foodSearchDto, userId, pageable);
         return foodDtos;
@@ -74,12 +74,9 @@ public class FoodService {
         );
 
         Long listId = foodCreateDto.getListId();
-        Lists list = null;
-        if(listId > 0) {
-            list = listRepository.findById(listId).orElseThrow(
-                    () -> new NoSuchElementException()
-            );
-        }
+        Lists list = listRepository.findById(listId).orElseThrow(
+                () -> new NoSuchElementException()
+        );
 
         // foodCategoryList 만들기
         List<Long> categoryIds = foodCreateDto.getCategoryIds();
@@ -118,12 +115,9 @@ public class FoodService {
                 () -> new NoSuchElementException());
 
         Long listId = foodModifyDto.getListId();
-        Lists list = null;
-        if(listId > 0) {
-            list = listRepository.findById(listId).orElseThrow(
-                    () -> new NoSuchElementException()
-            );
-        }
+        Lists list =  listRepository.findById(listId).orElseThrow(
+                () -> new NoSuchElementException()
+        );
 
         // 기존 FoodCategory del 처리 후 새로운 FoodCategoryList 만들기
         // -1.  기존 DB 카테고리와 새로운 카테고리가 겹치지 않는다면 isDel = true 로 변경

@@ -35,9 +35,10 @@ public class ListQueryRepositoryImpl implements ListQueryRepository{
         List<ListsDto> content = queryFactory
                 .select(new QListsDto(lists.id, lists.name, food.count()))
                 .from(lists)
-                .leftJoin(lists.foods, food).on(food.isDel.eq(false))
-                .where(lists.user.id.eq(userId), lists.isDel.eq(false))
+                .leftJoin(lists.foods, food).on(food.user.id.eq(userId), food.isDel.eq(false))
+                .where(lists.user.id.eq(userId).or(lists.user.id.isNull()), lists.isDel.eq(false))
                 .groupBy(lists.id, lists.user.id, lists.name)
+                .orderBy(lists.id.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -45,7 +46,7 @@ public class ListQueryRepositoryImpl implements ListQueryRepository{
         JPAQuery<Long> countQuery = queryFactory
                 .select(lists.id.count())
                 .from(lists)
-                .where(lists.user.id.eq(userId), lists.isDel.eq(false));
+                .where(lists.user.id.eq(userId).or(lists.user.id.isNull()), lists.isDel.eq(false));
 
         // count 쿼리가 필요하지 않은 경우 실행하지 않는다
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
@@ -56,7 +57,8 @@ public class ListQueryRepositoryImpl implements ListQueryRepository{
         return queryFactory
                 .select(new QListsDto(lists.id, lists.name))
                 .from(lists)
-                .where(lists.user.id.eq(userId), lists.isDel.eq(false))
+                .where(lists.user.id.eq(userId).or(lists.user.id.isNull()), lists.isDel.eq(false))
+                .orderBy(lists.id.asc())
                 .fetch();
     }
 }

@@ -48,7 +48,6 @@
         <div>
             <label for="listId">리스트</label>
             <select id="listId" th:field="*{listId}">
-                <option value="0">리스트 미선택</option>
                 <option th:each="list : ${lists}"
                         th:value="${list.id}"
                         th:text="${list.name}" />

@@ -27,6 +27,6 @@ public class FoodSearchDto {
     private LocalDate visitDateEnd;
     private FoodSearchOrder orderBy = FoodSearchOrder.VISIT_DATE_DESC;    // DATE_DESC, DATE_ASC, HIGH_SCORE, LOW_SCORE
 
-    private Long listId = 0L;
+    private Long listId = 1L;
 
 }
