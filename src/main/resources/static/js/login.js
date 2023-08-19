@@ -30,3 +30,9 @@ function login() {
         }
     });
 }
+
+function enterKey() {
+    if (window.event.keyCode == 13) {
+    	login();
+    }
+}
