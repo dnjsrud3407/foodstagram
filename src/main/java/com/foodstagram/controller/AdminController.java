@@ -28,13 +28,6 @@ public class AdminController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/category/create")
-    public String createCategoryForm(Model model) {
-        model.addAttribute("categoryCreateForm", new CategoryCreateForm());
-
-        return "admin/category/createForm";
-    }
-
     @PostMapping("/category/create")
     @ResponseBody
     public ResponseEntity categoryNameCreate(@Validated CategoryCreateForm categoryCreateForm, BindingResult result) {
