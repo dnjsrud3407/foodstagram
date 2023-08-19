@@ -103,7 +103,7 @@
                 </span>
                 <span th:with="num = ${paging.endNum + 1}">
                     <a th:onclick="|listSearch('${num}')|"
-                       th:class="${paging.last} ? 'disabled link' : 'link'">&gt;</a>
+                       th:class="${paging.last || paging.totalNum <= num} ? 'disabled link' : 'link'">&gt;</a>
                 </span>
             </div>
         </section>
