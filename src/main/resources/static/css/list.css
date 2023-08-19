@@ -1,0 +1,15 @@
+.listDiv {
+    width: 50%;
+    margin: auto;
+    border: 4px #8B3200 solid;
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.listDetail {
+    width: 90%;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+    margin: auto;
+    margin-bottom: 0.5rem;
+}

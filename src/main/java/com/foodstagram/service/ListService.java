@@ -1,5 +1,6 @@
 package com.foodstagram.service;
 
+import com.foodstagram.dto.ListCreateDto;
 import com.foodstagram.dto.ListsDto;
 import com.foodstagram.entity.Lists;
 import com.foodstagram.entity.User;
@@ -66,16 +67,16 @@ public class ListService {
 
     /**
      * 리스트 등록
-     * @param userId
-     * @param name
+     * @param listCreateDto
      * @return
      */
-    public Long createList(Long userId, String name) {
+    public Long createList(ListCreateDto listCreateDto, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NoSuchElementException()
         );
 
         // 리스트 이름 중복 확인
+        String name = listCreateDto.getName();
         Lists findList = listRepository.findByUserIdAndNameAndIsDel(userId, name, false);
         if(findList != null) {
             throw new IllegalStateException("이미 등록된 리스트입니다.");
