@@ -1,6 +1,7 @@
 package com.foodstagram.service;
 
 import com.foodstagram.dto.ListCreateDto;
+import com.foodstagram.dto.ListModifyDto;
 import com.foodstagram.dto.ListsDto;
 import com.foodstagram.entity.Lists;
 import com.foodstagram.entity.User;
@@ -91,29 +92,29 @@ public class ListService {
     /**
      * 리스트 수정
      * @param userId
-     * @param listId
-     * @param newName
+     * @param listModifyDto
      * @return
      */
-    public Long modifyList(Long userId, Long listId, String newName) {
-        Lists lists = listRepository.findById(listId).orElseThrow(
+    public Long modifyList(Long userId, ListModifyDto listModifyDto) {
+        Lists lists = listRepository.findById(listModifyDto.getListId()).orElseThrow(
                 () -> new NoSuchElementException());
 
+        String modifyName = listModifyDto.getModifyName();
         // 변경할 리스트 명이 현재와 동일하다면 변경 필요 X
-        if(newName.equals(lists.getName())) {
+        if(modifyName.equals(lists.getName())) {
             throw new IllegalStateException("이름이 동일합니다.");
         }
 
         // 리스트 이름 중복 확인
-        Lists findList = listRepository.findByUserIdAndNameAndIsDel(userId, newName, false);
+        Lists findList = listRepository.findByUserIdAndNameAndIsDel(userId, modifyName, false);
         if(findList != null) {
             throw new IllegalStateException("이미 등록된 리스트입니다.");
         }
 
         // isDel 값 수정
-        lists.updateList(newName, null);
+        lists.updateList(modifyName);
 
-        return listId;
+        return listModifyDto.getListId();
     }
 
     /**

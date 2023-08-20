@@ -20,7 +20,7 @@
         <div class="listDetail">
             <div style="margin: 0.2rem 1rem;">
                 <p id="createInput" class="inlineLeft">
-                    <span style="cursor: pointer;" onclick="createListForm(this)">+ 새 리스트 만들기</span>
+                    <span style="cursor: pointer;" onclick="createListForm()">+ 새 리스트 만들기</span>
                 </p>
                 <p id="createBtn" class="inlineRight"></p>
                 <p style="clear: both;"></p>
@@ -28,13 +28,16 @@
         </div>
         <div class="listDetail" th:each="list : ${lists}">
             <div style="margin: 0.2rem 1rem;">
-                <p class="inlineLeft">
+                <p class="modifyInput inlineLeft">
                     <span th:text="${list.name}" class="fw-600">리스트 이름</span>
                     <span th:text="${list.totalCnt}">리스트에 속한 게시글 수</span>
                 </p>
-                <p th:if="${list.id != 1}" th:onclick="|deleteList('${list.id}')|" class="link inlineRight">삭제</p>
-                <p th:if="${list.id != 1}" th:onclick="|modifyListForm('${list.id}', this)|" class="link inlineRight mr0p5r">수정</p>
-                <p th:onclick="|location.href='@{/list/{listId} (listId=${list.id})}'|" class="link inlineRight mr0p5r">상세보기</p>
+                <p class="modifyBtn inlineRight">
+                    <span th:onclick="|location.href='@{/list/{listId} (listId=${list.id})}'|" class="link mr0p5r">상세보기</span>
+                    <span th:if="${list.id != 1}" th:data-id="${list.id}" th:data-name="${list.name}" th:data-totalCnt="${list.totalCnt}"
+                          th:onclick="modifyListForm(this.getAttribute('data-id'), this.getAttribute('data-name'), this.getAttribute('data-totalCnt'), this)" class="link mr0p5r">수정</span>
+                    <span th:if="${list.id != 1}" th:onclick="|deleteList('${list.id}')|" class="link">삭제</span>
+                </p>
                 <p style="clear: both;"></p>
             </div>
         </div>

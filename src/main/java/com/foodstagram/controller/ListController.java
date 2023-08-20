@@ -2,7 +2,9 @@ package com.foodstagram.controller;
 
 import com.foodstagram.config.auth.PrincipalDetails;
 import com.foodstagram.controller.form.ListCreateForm;
+import com.foodstagram.controller.form.ListModifyForm;
 import com.foodstagram.dto.ListCreateDto;
+import com.foodstagram.dto.ListModifyDto;
 import com.foodstagram.dto.ListsDto;
 import com.foodstagram.error.ErrorResult;
 import com.foodstagram.page.MyPage;
@@ -59,7 +61,7 @@ public class ListController {
     @PostMapping("/create")
     public ResponseEntity createList(@RequestBody @Validated ListCreateForm listCreateForm, BindingResult result, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         if(result.hasErrors()) {
-            ErrorResult errorResult = new ErrorResult(result.getFieldError("name").getField(), result.getFieldError("name").getDefaultMessage());
+            ErrorResult errorResult = new ErrorResult("name", result.getFieldError("name").getDefaultMessage());
             return new ResponseEntity(errorResult, HttpStatus.BAD_REQUEST);
         }
 
@@ -98,6 +100,44 @@ public class ListController {
             listService.deleteList(userId, listId);
         } catch (IllegalStateException e) {
             ErrorResult errorResult = new ErrorResult("global", e.getMessage());
+            return new ResponseEntity(errorResult, HttpStatus.BAD_REQUEST);
+        }
+
+        HashMap<String, String> serviceResult = new HashMap<>();
+        serviceResult.put("status", "ok");
+
+        return new ResponseEntity(serviceResult, HttpStatus.OK);
+    }
+
+    /**
+     * 리스트 수정하기
+     * @param listModifyForm
+     * @param result
+     * @param principalDetails
+     * @return
+     */
+    @PostMapping("/modify")
+    public ResponseEntity modifyList(@RequestBody @Validated ListModifyForm listModifyForm, BindingResult result,
+                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        // 유효성 검사
+        if(result.hasErrors()) {
+            if(result.hasFieldErrors("listId")) {
+                ErrorResult errorResult = new ErrorResult("global", null);
+                return new ResponseEntity(errorResult, HttpStatus.BAD_REQUEST);
+            } else {
+                ErrorResult errorResult = new ErrorResult("modifyName", result.getFieldError("modifyName").getDefaultMessage());
+                return new ResponseEntity(errorResult, HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        ListModifyDto listModifyDto = new ListModifyDto(listModifyForm);
+        Long userId = principalDetails.getUser().getId();
+
+        try {
+            // 중복 검사, 수정하기 전과 동일한지 검사
+            listService.modifyList(userId, listModifyDto);
+        } catch (IllegalStateException e) {
+            ErrorResult errorResult = new ErrorResult("modifyName", e.getMessage());
             return new ResponseEntity(errorResult, HttpStatus.BAD_REQUEST);
         }
 

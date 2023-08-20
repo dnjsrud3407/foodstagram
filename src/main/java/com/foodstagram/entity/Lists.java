@@ -54,7 +54,7 @@ public class Lists extends BaseTimeEntity {
     }
 
     //== 변경 메서드 ==//
-    public void updateList(String name, Boolean isDel) {
+    public void updateList(String name) {
         this.name = name;
         this.isDel = isDel;
     }
