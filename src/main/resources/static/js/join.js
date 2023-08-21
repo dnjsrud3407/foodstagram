@@ -163,7 +163,7 @@ function emailAuth() {
     }
 
     // 이메일 인증 메일 보내기
-    document.getElementById('checkEmailResult').innerHTML = "이메일 전송이 완료되었습니다. 인증번호를 입력해주세요.";
+    document.getElementById('checkEmailResult').innerHTML = "이메일 전송 중입니다. 잠시만 기다려주세요.";
     var email = document.getElementById('email').value;
     var param = {"email":email}
 
@@ -173,6 +173,9 @@ function emailAuth() {
         contentType: "application/json; charset=UTF-8",
         type: 'POST',
         dataType: 'json',
+        success: function(data) {
+            document.getElementById('checkEmailResult').innerHTML = "이메일 전송이 완료되었습니다. 인증번호를 입력해주세요.";
+        },
         error: function(data){
             if(data.responseJSON.code == "email") {
                 document.getElementById('checkEmailResult').innerHTML = data.responseJSON.message;
