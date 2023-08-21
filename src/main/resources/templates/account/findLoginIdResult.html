@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <link th:href="@{/css/common.css}" rel="stylesheet" />
+</head>
+<body>
+  아이디 찾기
+  <div>
+    인증한 이메일로 가입된 아이디는 <span th:text="${loginId}"></span> 입니다.
+  </div>
+  <div>
+    <a th:href="@{/account/loginForm}" class="link">로그인</a>
+    <a th:href="@{/account/findPw}" class="link">비밀번호 찾기</a>
+    <a th:href="@{/account/join}" class="link">회원가입</a>
+  </div>
+  <script th:src="@{/js/account.js}"></script>
+</body>
+</html>
