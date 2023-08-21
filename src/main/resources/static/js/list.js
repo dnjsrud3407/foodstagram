@@ -55,8 +55,8 @@ function deleteList(listId) {
 
     $.ajax({
         url: '/list/delete',
-        data: {"listId":listId},
-        contentType: "application/x-www-form-urlencoded",
+        data: JSON.stringify(param),
+        contentType: "application/json; charset=UTF-8",
         type: 'POST',
         dataType: 'json',
         success: function(data) {

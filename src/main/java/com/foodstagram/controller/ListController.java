@@ -89,7 +89,7 @@ public class ListController {
      * @return
      */
     @PostMapping("/delete")
-    public ResponseEntity deleteList(@RequestParam Map<String, Object> param, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity deleteList(@RequestBody Map<String, Object> param, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long listId = Long.parseLong(param.get("listId").toString());
         Long userId = principalDetails.getUser().getId();
 
