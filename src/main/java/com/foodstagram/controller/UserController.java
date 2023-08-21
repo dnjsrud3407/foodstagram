@@ -60,6 +60,7 @@ public class UserController {
 
         // 2. 유효성 검사
         if(result.hasErrors()) {
+            result.addError(new ObjectError("userJoinForm", null, null, "error"));
             return "user/joinForm";
         }
 
@@ -83,6 +84,7 @@ public class UserController {
         }
 
         if(result.hasErrors()) {
+            result.addError(new ObjectError("userJoinForm", null, null, "error"));
             return "user/joinForm";
         }
 
