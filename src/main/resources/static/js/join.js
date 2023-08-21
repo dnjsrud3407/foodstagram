@@ -173,7 +173,7 @@ function emailAuth() {
         type: 'POST',
         dataType: 'json',
         success: function(data) {
-            document.getElementById('checkEmailResult').innerHTML = "이메일 전송이 완료되었습니다. 인증번호를 입력해주세요."
+            document.getElementById('checkEmailResult').innerHTML = "이메일 전송이 완료되었습니다. 인증번호를 입력해주세요.";
         },
         error: function(data){
             if(data.responseJSON.code == "email") {
@@ -200,7 +200,7 @@ function authNumCheck() {
     var email = document.getElementById('email').value;
     var authNum = document.getElementById('authNum').value;
 
-    if(authNum != '' && emailCheckResult) {
+    if(authNum != '' && authNum.length == 6 && emailCheckResult) {
         var param = {"email":email, "authNum":authNum}
         $.ajax({
             url: '/api/mail/email/check',
@@ -214,8 +214,8 @@ function authNumCheck() {
             error: function(data){
                 if(data.responseJSON.code == "email") {
                     document.getElementById('checkEmailResult').innerHTML = data.responseJSON.message;
-                } else {
-                    document.getElementById('checkEmailResult').innerHTML = error;
+                } else if(data.responseJSON.code == "authNum") {
+                    document.getElementById('checkEmailResult').innerHTML = data.responseJSON.message;
                     document.getElementById('authNum').classList.add("fieldError");
                 }
             }
@@ -250,25 +250,4 @@ function checkForm() {
     }
 
     return true;
-}
-
-// 백에서 오류발생한다면
-var globalErr = document.getElementById('globalErr');
-if(globalErr != null) {
-    var loginIdErr = document.getElementById('loginIdErr');
-    var emailErr = document.getElementById('emailErr');
-    var authNumErr = document.getElementById('authNumErr');
-
-    if(loginIdErr == null) {
-        loginIdCheckResult = true;
-    }
-
-    if(emailErr == null) {
-        emailCheckResult = true;
-        emailAuthResult = true;
-    }
-
-    if(authNumErr == null) {
-        emailAuthResult = true;
-    }
 }

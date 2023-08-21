@@ -42,6 +42,7 @@ public class UserController {
     private final UserService userService;
     private final FoodService foodService;
     private final ListService listService;
+    private final RedisService redisService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final MessageSource ms;
 
@@ -53,14 +54,12 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public String join(@Validated(ValidationSequence.class) @ModelAttribute UserJoinForm userJoinForm, BindingResult result,
-                       HttpSession session, Model model) {
-        // 1. 유효성 검사 - 비밀번호 동일한지 확인, session에 이메일 인증번호 동일한지 확인
-        validate(userJoinForm, result, session);
+    public String join(@Validated(ValidationSequence.class) @ModelAttribute UserJoinForm userJoinForm, BindingResult result) {
+        // 1. 유효성 검사 - 비밀번호 동일한지 확인, Redis 에 이메일 인증번호 동일한지 확인
+        validate(userJoinForm, result);
 
         // 2. 유효성 검사
         if(result.hasErrors()) {
-            result.addError(new ObjectError("userJoinForm", null, null, "error"));
             return "user/joinForm";
         }
 
@@ -84,9 +83,11 @@ public class UserController {
         }
 
         if(result.hasErrors()) {
-            result.addError(new ObjectError("userJoinForm", null, null, "error"));
             return "user/joinForm";
         }
+
+        // redis 에서 삭제
+        redisService.deleteValues(userJoinForm.getEmail());
 
         return "redirect:/loginForm";
     }
@@ -98,15 +99,17 @@ public class UserController {
      * @param userJoinForm
      * @param result
      */
-    private void validate(UserJoinForm userJoinForm, BindingResult result, HttpSession session) {
+    private void validate(UserJoinForm userJoinForm, BindingResult result) {
         if(!userJoinForm.getPassword().equals(userJoinForm.getPasswordConfirm())) {
             result.rejectValue("passwordConfirm", "equal");
         }
 
-        Object authNumSession = session.getAttribute(userJoinForm.getEmail());
-        if(authNumSession != null) {
+        String email = userJoinForm.getEmail();
+        String redisAuthNum = redisService.getValue(email);
+
+        if(redisAuthNum != null) {
             String authNum = userJoinForm.getAuthNum();
-            if(!authNum.equals(authNumSession.toString())) {
+            if(!authNum.equals(redisAuthNum)) {
                 result.rejectValue("authNum", "equal");
             }
         } else {
