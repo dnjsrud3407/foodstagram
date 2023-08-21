@@ -77,7 +77,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             // refreshTokenCookie 토큰이 조작, 만료되었을 때 -> 로그인 페이지 이동
             String refreshToken = CookieUtil.getAccessToken(refreshTokenCookie);
             if (jwtTokenService.isExpired(refreshToken)) {
-                response.sendRedirect("/loginForm");
+                response.sendRedirect("/account/loginForm");
                 return;
             }
 
@@ -134,7 +134,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 return;
             }
 
-            response.sendRedirect("/loginForm");
+            response.sendRedirect("/account/loginForm");
         } catch (UnsupportedEncodingException e) {
             chain.doFilter(request, response);
         } catch (Exception e) {
@@ -144,7 +144,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             }
 
             log.error(e.getMessage());
-            response.sendRedirect("/loginForm");
+            response.sendRedirect("/account/loginForm");
         }
 
     }

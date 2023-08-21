@@ -8,7 +8,7 @@
 </head>
 <body>
 홈페이지
-<a sec:authorize="isAnonymous()" th:href="@{/loginForm}" class="link">로그인</a>
+<a sec:authorize="isAnonymous()" th:href="@{/account/loginForm}" class="link">로그인</a>
 <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="link">로그아웃</a>
 <a sec:authorize="isAuthenticated()" th:href="@{/food/list}" class="link">리스트</a>
 <a sec:authorize="isAuthenticated()" th:href="@{/user/myPage}" class="link">마이페이지</a>

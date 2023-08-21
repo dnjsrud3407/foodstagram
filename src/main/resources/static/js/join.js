@@ -22,7 +22,7 @@ function loginIdCheck() {
         // 2. 아이디 중복 검사
         var param = {"loginId":loginId}
         $.ajax({
-            url: '/user/loginIdCheck',
+            url: '/account/loginIdCheck',
             data: JSON.stringify(param),
             contentType: "application/json; charset=UTF-8",
             type: 'POST',
@@ -122,7 +122,7 @@ function emailCheck() {
         // 2. 이메일 중복 검사
         var param = {"email":email}
         $.ajax({
-            url: '/user/emailCheck',
+            url: '/account/emailCheck',
             data: JSON.stringify(param),
             contentType: "application/json; charset=UTF-8",
             type: 'POST',

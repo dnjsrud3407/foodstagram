@@ -22,8 +22,10 @@
     <input type="button" onclick="login()" value="로그인">
   </div>
   <div>
-    <a th:href="@{/oauth2/authorization/kakao}"><img th:src="@{/image/kakao_login_medium_wide.png}"></a>
-    <a th:href="@{/user/join}" class="link">회원가입</a>
+    <a th:href="@{/oauth2/authorization/kakao}"><img th:src="@{/image/kakao_login_medium_wide.png}"></a><br>
+    <a th:href="@{/account/findLoginId}" class="link">아이디 찾기</a>
+    <a th:href="@{/account/findPw}" class="link">비밀번호 찾기</a>
+    <a th:href="@{/account/join}" class="link">회원가입</a>
   </div>
 </form>
 <script th:inline="javascript">
