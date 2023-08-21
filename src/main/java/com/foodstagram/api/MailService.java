@@ -29,7 +29,9 @@ public class MailService {
                 "<br><br>" +
                 "인증번호는 " + emailConfirmNum + " 입니다." +
                 "<br>" +
-                "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
+                "해당 인증번호를 인증번호 확인란에 기입하여 주세요." +
+                "<br>" +
+                "인증번호 유효시간은 10분 입니다.";
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
