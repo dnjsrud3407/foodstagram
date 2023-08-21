@@ -33,10 +33,10 @@
                     <span th:text="${list.totalCnt}">리스트에 속한 게시글 수</span>
                 </p>
                 <p class="modifyBtn inlineRight">
-                    <span th:onclick="|location.href='@{/list/{listId} (listId=${list.id})}'|" class="link mr0p5r">상세보기</span>
+                    <span th:if="${list.totalCnt > 0}" th:onclick="|location.href='@{/list/{listId} (listId=${list.id})}'|" class="link">상세보기</span>
                     <span th:if="${list.id != 1}" th:data-id="${list.id}" th:data-name="${list.name}" th:data-totalCnt="${list.totalCnt}"
-                          th:onclick="modifyListForm(this.getAttribute('data-id'), this.getAttribute('data-name'), this.getAttribute('data-totalCnt'), this)" class="link mr0p5r">수정</span>
-                    <span th:if="${list.id != 1}" th:onclick="|deleteList('${list.id}')|" class="link">삭제</span>
+                          th:onclick="modifyListForm(this.getAttribute('data-id'), this.getAttribute('data-name'), this.getAttribute('data-totalCnt'), this)" class="link">수정</span>
+                    <span th:if="${list.id != 1 and list.totalCnt == 0}" th:onclick="|deleteList('${list.id}')|" class="link">삭제</span>
                 </p>
                 <p style="clear: both;"></p>
             </div>

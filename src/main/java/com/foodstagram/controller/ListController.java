@@ -154,7 +154,7 @@ public class ListController {
      * @return
      */
     @GetMapping("/{listId}")
-    public String detail(@PathVariable Long listId, @PageableDefault(page = 0, size = 2) Pageable pageable,
+    public String detail(@PathVariable Long listId, @PageableDefault(page = 0, size = 5) Pageable pageable,
                          @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         Long userId = principalDetails.getUser().getId();
         FoodSearchDto foodSearchDto = new FoodSearchDto(listId);
@@ -178,10 +178,17 @@ public class ListController {
      * @return
      */
     @PostMapping("/deleteFood")
-    public String deleteFood(@PageableDefault(page = 0, size = 2) Pageable pageable,
+    public String deleteFood(@PageableDefault(page = 0, size = 5) Pageable pageable,
                              @RequestParam Long listId, @RequestParam List<Long> deleteFoodIds,
-                             RedirectAttributes redirectAttributes) {
+                             @AuthenticationPrincipal PrincipalDetails principalDetails, RedirectAttributes redirectAttributes) {
         foodService.modifyListNotDecided(deleteFoodIds);
+
+        // 리스트에 남아있는 게시글 수가 0인 경우 /list로 redirect 해준다
+        Long userId = principalDetails.getUser().getId();
+        int foodCount = foodService.countListFoods(userId, listId);
+        if(foodCount < 1) {
+            return "redirect:/list";
+        }
 
         // 삭제되는 리스트 개수가 페이지 사이즈와 같은 경우 page - 1 해준다
         int page = pageable.getPageNumber();

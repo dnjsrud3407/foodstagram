@@ -33,6 +33,7 @@ public class ListService {
      * @param pageable
      * @return
      */
+    @Transactional(readOnly = true)
     public Page<ListsDto> findLists(Long userId, Pageable pageable) {
         return listRepository.findListsDtoByUserId(userId, pageable);
     }
@@ -42,6 +43,7 @@ public class ListService {
      * @param userId
      * @return
      */
+    @Transactional(readOnly = true)
     public List<ListsDto> findLists(Long userId) {
         return listRepository.findListsDtoByUserId(userId);
     }
@@ -51,6 +53,7 @@ public class ListService {
      * @param userId
      * @return
      */
+    @Transactional(readOnly = true)
     public Long countLists(Long userId) {
         return listRepository.countListsByUserId(userId).orElse(0L);
     }
@@ -60,6 +63,7 @@ public class ListService {
      * @param listId
      * @return
      */
+    @Transactional(readOnly = true)
     public String findListName(Long listId) {
         return listRepository.findListNameByListId(listId).orElseThrow(
                 () -> new NoSuchElementException()

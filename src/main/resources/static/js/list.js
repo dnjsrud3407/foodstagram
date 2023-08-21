@@ -150,9 +150,17 @@ function modifyListCancel(listId, obj) {
                 var modifyBtnTag = modifyTags[i];
 
                 // 버튼
-                var btnString = `<span onclick="location.href=&quot;/list/${listId}&quot;" class='link mr0p5r'>상세보기</span>`;
-                btnString += `<span onclick="modifyListForm(${listId}, &quot;${originalName}&quot;, ${totalCnt}, this)" class='link mr0p5r'>수정</span>`;
-                btnString += `<span onclick='deleteList(${listId})' class='link'>삭제</span>`;
+                var btnString = "";
+                if(totalCnt > 0) {
+                    btnString += `<span onclick="location.href=&quot;/list/${listId}&quot;" class='link'>상세보기</span>`;
+                }
+
+                btnString += `<span onclick="modifyListForm(${listId}, &quot;${originalName}&quot;, ${totalCnt}, this)" class='link ml0p4r'>수정</span>`;
+
+                if(totalCnt == 0) {
+                    btnString += `<span onclick='deleteList(${listId})' class='link ml0p4r'>삭제</span>`;
+                }
+
                 modifyBtnTag.innerHTML = btnString;
             }
         }

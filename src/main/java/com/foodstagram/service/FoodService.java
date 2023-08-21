@@ -46,6 +46,16 @@ public class FoodService {
     }
 
     /**
+     * 리스트에 남아있는 게시글 수 확인
+     * @param userId
+     * @param listId
+     * @return
+     */
+    public int countListFoods(Long userId, Long listId) {
+        return foodRepository.countIsDelFalseByUserIdAndListId(userId, listId);
+    }
+
+    /**
      * 게시글 검색하기
      * @param foodSearchDto
      * @return
