@@ -35,8 +35,16 @@ public class RedisService {
      * @param refreshToken
      */
     public void saveRefreshToken(String loginId, String refreshToken) {
-        ValueOperations<String, Object> values = redisTemplate.opsForValue();
-        values.set(loginId, refreshToken, Duration.ofMillis(JwtProperties.REFRESH_TOKEN_EXPIRATION_TIME));
+        setValues(loginId, refreshToken, Duration.ofMillis(JwtProperties.REFRESH_TOKEN_EXPIRATION_TIME));
+    }
+
+    /**
+     * email 인증시 인증번호 저장 key: email | value: authNum
+     * @param email
+     * @param authNum
+     */
+    public void saveEmailAuthNum(String email, String authNum) {
+        setValues(email, authNum, Duration.ofMinutes(10));
     }
 
     public String getValue(String key) {
@@ -58,6 +66,14 @@ public class RedisService {
 
     public void deleteValues(String key) {
         redisTemplate.delete(key);
+    }
+
+    /**
+     * 이메일 인증번호 확인 완료시 삭제하기
+     * @param email
+     */
+    public void deleteEmailAuthNum(String email) {
+        redisTemplate.delete(email);
     }
 
     /**

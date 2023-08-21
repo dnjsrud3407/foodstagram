@@ -90,7 +90,7 @@ public class AccountController {
         }
 
         // redis 에서 삭제
-        redisService.deleteValues(userJoinForm.getEmail());
+        redisService.deleteEmailAuthNum(userJoinForm.getEmail());
 
         return "redirect:/account/loginForm";
     }
@@ -203,7 +203,7 @@ public class AccountController {
         }
 
         // redis 에서 삭제
-        redisService.deleteValues(emailCheckForm.getEmail());
+        redisService.deleteEmailAuthNum(emailCheckForm.getEmail());
 
         // loginId 3~4자리는 *로 변경
         loginId = makeLoginIdUnknown(loginId);

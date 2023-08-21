@@ -51,7 +51,7 @@ public class ApiController {
 
         // 이메일 전송 완료
         // Redis 저장 및 성공 return
-        redisService.setValues(email, authNum, Duration.ofMinutes(10));
+        redisService.saveEmailAuthNum(email, authNum);
 
         HashMap<String, String> result = new HashMap<>();
         result.put(email, authNum);
