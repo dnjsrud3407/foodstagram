@@ -3,11 +3,10 @@ package com.foodstagram.controller;
 import com.foodstagram.config.auth.PrincipalDetails;
 import com.foodstagram.controller.form.ListCreateForm;
 import com.foodstagram.controller.form.ListModifyForm;
-import com.foodstagram.dto.ListCreateDto;
-import com.foodstagram.dto.ListModifyDto;
-import com.foodstagram.dto.ListsDto;
+import com.foodstagram.dto.*;
 import com.foodstagram.error.ErrorResult;
 import com.foodstagram.page.MyPage;
+import com.foodstagram.service.FoodService;
 import com.foodstagram.service.ListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +22,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -34,6 +35,7 @@ import java.util.Map;
 public class ListController {
 
     private final ListService listService;
+    private final FoodService foodService;
     private final MessageSource ms;
 
     @GetMapping("")
@@ -145,5 +147,52 @@ public class ListController {
         serviceResult.put("status", "ok");
 
         return new ResponseEntity(serviceResult, HttpStatus.OK);
+    }
+
+    /**
+     * 리스트 상세보기
+     * @return
+     */
+    @GetMapping("/{listId}")
+    public String detail(@PathVariable Long listId, @PageableDefault(page = 0, size = 2) Pageable pageable,
+                         @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+        Long userId = principalDetails.getUser().getId();
+        FoodSearchDto foodSearchDto = new FoodSearchDto(listId);
+
+        Page<FoodDto> foodList = foodService.searchFoods(foodSearchDto, userId, pageable);
+
+        MyPage paging = new MyPage(foodList);
+
+        String listName = listService.findListName(listId);
+        ListsDto listsDto = new ListsDto(listId, listName, foodList.getTotalElements());
+
+        model.addAttribute("foodList", foodList);
+        model.addAttribute("listsDto", listsDto);
+        model.addAttribute("paging", paging);
+
+        return "list/detail";
+    }
+
+    /**
+     * 리스트에서 게시글 제거
+     * @return
+     */
+    @PostMapping("/deleteFood")
+    public String deleteFood(@PageableDefault(page = 0, size = 2) Pageable pageable,
+                             @RequestParam Long listId, @RequestParam List<Long> deleteFoodIds,
+                             RedirectAttributes redirectAttributes) {
+        foodService.modifyListNotDecided(deleteFoodIds);
+
+        // 삭제되는 리스트 개수가 페이지 사이즈와 같은 경우 page - 1 해준다
+        int page = pageable.getPageNumber();
+        int size = pageable.getPageSize();
+        if(deleteFoodIds.size() == size) {
+            page -= 1;
+        }
+
+        redirectAttributes.addAttribute("page", page);
+        redirectAttributes.addAttribute("size", size);
+
+        return "redirect:/list/" + listId;
     }
 }

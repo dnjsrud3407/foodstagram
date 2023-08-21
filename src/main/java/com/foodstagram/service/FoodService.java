@@ -224,4 +224,13 @@ public class FoodService {
         foodRepository.updateIsDelTrueByUserId(userId);
     }
 
+    /**
+     * 리스트에서 게시글 제거
+     * @param deleteFoodIds
+     */
+    @Transactional
+    public void modifyListNotDecided(List<Long> deleteFoodIds) {
+        foodRepository.updateListIdNotDecidedByFoodIds(deleteFoodIds);
+    }
+
 }

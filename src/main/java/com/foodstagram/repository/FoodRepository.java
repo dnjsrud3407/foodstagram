@@ -28,4 +28,8 @@ public interface FoodRepository extends JpaRepository<Food, Long>, FoodQueryRepo
 
     @Query("select count(f.id) from Food f where f.user.id = :userId and f.isDel = false")
     Optional<Long> countFoodByUserId(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("update Food f set f.list.id = 1 where f.id in :deleteFoodIds")
+    void updateListIdNotDecidedByFoodIds(@Param("deleteFoodIds") List<Long> deleteFoodIds);
 }

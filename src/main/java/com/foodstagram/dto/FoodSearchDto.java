@@ -27,6 +27,13 @@ public class FoodSearchDto {
     private LocalDate visitDateEnd;
     private FoodSearchOrder orderBy = FoodSearchOrder.VISIT_DATE_DESC;    // DATE_DESC, DATE_ASC, HIGH_SCORE, LOW_SCORE
 
-    private Long listId = 1L;
+    private Long listId = 0L;
 
+    /**
+     * 리스트 목록에서 수정할 때 사용
+     * @param listId
+     */
+    public FoodSearchDto(Long listId) {
+        this.listId = listId;
+    }
 }
