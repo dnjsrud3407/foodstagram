@@ -276,4 +276,9 @@ if(globalErr != null) {
         emailCheckResult = true;
         emailAuthResult = true;
     }
+
+    if(authNumErr != null && authNumErr.innerHTML == expiredEmail) {
+        emailCheckResult = false;
+        emailAuthResult = false;
+    }
 }

@@ -1,4 +1,5 @@
 var emailCheckResult = false;
+var emailAuthResult = false;
 
 function emailCheck() {
     // 초기화
@@ -74,6 +75,7 @@ function emailAuth() {
 // 인증번호 유효성 체크
 function authNumCheck() {
     // 초기화
+    emailAuthResult = false;
     document.getElementById('checkEmailResult').innerHTML = '';
     document.getElementById('authNum').classList.remove("fieldError");
     var authNumErr = document.getElementById('authNumErr');
@@ -81,10 +83,29 @@ function authNumCheck() {
         authNumErr.innerHTML = '';
     }
 
+    var email = document.getElementById('email').value;
     var authNum = document.getElementById('authNum').value;
 
-    if(authNum != '' && authNum.length == 6) {
-        emailAuthResult = true;
+    if(authNum != '' && authNum.length == 6 && emailCheckResult) {
+        var param = {"email":email, "authNum":authNum}
+        $.ajax({
+            url: '/api/mail/email/check',
+            data: JSON.stringify(param),
+            contentType: "application/json; charset=UTF-8",
+            type: 'POST',
+            dataType: 'json',
+            success: function(data) {
+                emailAuthResult = true;
+            },
+            error: function(data){
+                if(data.responseJSON.code == "email") {
+                    document.getElementById('checkEmailResult').innerHTML = data.responseJSON.message;
+                } else if(data.responseJSON.code == "authNum") {
+                    document.getElementById('checkEmailResult').innerHTML = data.responseJSON.message;
+                    document.getElementById('authNum').classList.add("fieldError");
+                }
+            }
+        });
     }
 }
 
@@ -114,5 +135,10 @@ if(globalErr != null) {
 
     if(emailErr == null) {
         emailCheckResult = true;
+    }
+
+    if(authNumErr != null && authNumErr.innerHTML == expiredEmail) {
+        emailCheckResult = false;
+        emailAuthResult = false;
     }
 }

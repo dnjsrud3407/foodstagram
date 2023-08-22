@@ -107,11 +107,19 @@ public class AccountController {
             result.rejectValue("passwordConfirm", "equal");
         }
 
-        String email = userJoinForm.getEmail();
+        validateAuthNum(userJoinForm.getEmail(), userJoinForm.getAuthNum(), result);
+    }
+
+    /**
+     * 이메일 인증번호 동일한지 확인
+     * @param email
+     * @param authNum
+     * @param result
+     */
+    private void validateAuthNum(String email, String authNum, BindingResult result) {
         String redisAuthNum = redisService.getValue(email);
 
         if(redisAuthNum != null) {
-            String authNum = userJoinForm.getAuthNum();
             if(!authNum.equals(redisAuthNum)) {
                 result.rejectValue("authNum", "equal");
             }
@@ -181,7 +189,7 @@ public class AccountController {
     public String findLoginId(@Validated(ValidationSequence.class) @ModelAttribute EmailCheckForm emailCheckForm, BindingResult result,
                               RedirectAttributes redirectAttributes) {
         // 1. 유효성 검사 - Redis 에 이메일 인증번호 동일한지 확인
-        validate(emailCheckForm, result);
+        validateAuthNum(emailCheckForm.getEmail(), emailCheckForm.getAuthNum(), result);
 
         // 2. 유효성 검사
         if(result.hasErrors()) {
@@ -212,21 +220,7 @@ public class AccountController {
         return "redirect:/account/findLoginIdResult";
     }
 
-    /**
-     * loginId 찾을 때 유효성 검사
-     * - 이메일 인증번호 동일한지 확인
-     * @param emailCheckForm
-     * @param result
-     */
-    private void validate(EmailCheckForm emailCheckForm, BindingResult result) {
-        String email = emailCheckForm.getEmail();
-        String authNum = emailCheckForm.getAuthNum();
-        String redisAuthNum = redisService.getValue(email);
 
-        if(redisAuthNum == null || (redisAuthNum != null && !authNum.equals(redisAuthNum))) {
-            result.rejectValue("authNum", "equal");
-        }
-    }
 
     private String makeLoginIdUnknown(String loginId) {
         return loginId.substring(0, 3) + "**" + loginId.substring(5, loginId.length());

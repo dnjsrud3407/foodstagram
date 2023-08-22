@@ -28,6 +28,7 @@
   </form>
   <script th:inline="javascript">
     var formatEmail = "[(#{format.email})]";
+    var expiredEmail = "[(#{expired.emailCheckForm.authNum})]";
     var error = "[(#{error})]";
   </script>
   <script th:src="@{/js/account.js}"></script>
