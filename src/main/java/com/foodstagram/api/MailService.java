@@ -1,5 +1,6 @@
 package com.foodstagram.api;
 
+import com.foodstagram.config.RandomPassword;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,15 @@ import java.util.Random;
 public class MailService {
 
     private final JavaMailSenderImpl javaMailSender;
+    private final RandomPassword randomPassword;
 
     private int makeRandomNumber() {
         Random random = new Random();
         return random.nextInt(888888) + 111111;
+    }
+
+    private String makeRandomPassword() {
+        return randomPassword.makePassword(10);
     }
 
     public String sendMail(String email) throws MessagingException {
@@ -42,5 +48,29 @@ public class MailService {
         javaMailSender.send(mimeMessage);
 
         return Integer.toString(emailConfirmNum);
+    }
+
+    public String sendPwChangeMail(String email) throws MessagingException {
+        String randomPassword = makeRandomPassword();
+
+        String title = "[foodstagram] 푸드스타그램 임시 비밀번호 변경";
+        String message =
+                "foodstagram 방문해주셔서 감사합니다." +
+                        "<br><br>" +
+                        "임시 비밀번호는 " + randomPassword + " 입니다." +
+                        "<br>" +
+                        "로그인 후 비밀번호를 변경해주세요." +
+                        "<br>" +
+                        "감사합니다.";
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+        helper.setTo(email);
+        helper.setSubject(title);
+        helper.setText(message, true);
+        javaMailSender.send(mimeMessage);
+
+        return randomPassword;
     }
 }
