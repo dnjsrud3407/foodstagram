@@ -13,11 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
-    @Query("select u from User u where u.loginId = :loginId and u.isDel = false")
-    Optional<User> findIsDelFalseUserByLoginId(@Param("loginId") String loginId);
+    Optional<User> findByLoginIdAndEmail(String loginId, String email);
 
-    User findByLoginIdAndEmailAndIsDel(String loginId, String email, Boolean isDel);
-
-    @Query("select u.loginId from User u where u.email = :email and u.isDel = :isDel")
-    Optional<String> findLoginIdByEmailAndIsDel(@Param("email") String email, @Param("isDel") Boolean isDel);
+    @Query("select u.loginId from User u where u.email = :email")
+    Optional<String> findLoginIdByEmail(@Param("email") String email);
 }

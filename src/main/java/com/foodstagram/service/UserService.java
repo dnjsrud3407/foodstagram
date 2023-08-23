@@ -93,7 +93,7 @@ public class UserService {
      * @return
      */
     public String findLoginId(String email) {
-        return userRepository.findLoginIdByEmailAndIsDel(email, false).orElseThrow(
+        return userRepository.findLoginIdByEmail(email).orElseThrow(
                 () -> new IllegalStateException("일치하는 회원이 없습니다."));
     }
 
@@ -106,10 +106,10 @@ public class UserService {
      * @return
      */
     public void findPassword(String loginId, String email) {
-        User findByLoginId = userRepository.findIsDelFalseUserByLoginId(loginId).orElseThrow(
+        User findByLoginId = userRepository.findByLoginId(loginId).orElseThrow(
                 () -> new IllegalStateException("notFound.findPwForm.loginId"));
 
-        userRepository.findLoginIdByEmailAndIsDel(email, false).orElseThrow(
+        userRepository.findLoginIdByEmail(email).orElseThrow(
                 () -> new IllegalStateException("notFound.findPwForm.email"));
 
         if(!findByLoginId.getEmail().equals(email)) {
@@ -125,7 +125,7 @@ public class UserService {
      */
     @Transactional
     public void changePassword(String loginId, String email, String newPassword) {
-        User findUser = userRepository.findByLoginIdAndEmailAndIsDel(loginId, email, false);
+        User findUser = userRepository.findByLoginIdAndEmail(loginId, email).orElse(null);
         if(findUser != null) {
             findUser.changePassword(passwordEncoder.encode(newPassword));
         }
