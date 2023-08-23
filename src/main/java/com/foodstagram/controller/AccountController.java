@@ -1,12 +1,15 @@
 package com.foodstagram.controller;
 
+import com.foodstagram.api.MailService;
 import com.foodstagram.config.redis.RedisService;
 import com.foodstagram.controller.form.EmailCheckForm;
+import com.foodstagram.controller.form.FindPwForm;
 import com.foodstagram.controller.form.UserJoinForm;
 import com.foodstagram.controller.validation.ValidationSequence;
 import com.foodstagram.dto.UserJoinDto;
 import com.foodstagram.error.ErrorResult;
 import com.foodstagram.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -31,6 +34,7 @@ public class AccountController {
 
     private final UserService userService;
     private final RedisService redisService;
+    private final MailService mailService;
     private final MessageSource ms;
 
     /**
@@ -220,8 +224,6 @@ public class AccountController {
         return "redirect:/account/findLoginIdResult";
     }
 
-
-
     private String makeLoginIdUnknown(String loginId) {
         return loginId.substring(0, 3) + "**" + loginId.substring(5, loginId.length());
     }
@@ -236,7 +238,7 @@ public class AccountController {
     public String findLoginIdResult(HttpServletRequest request, Model model) {
         Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
 
-        if(flashMap == null) {
+        if(flashMap == null || flashMap.get("loginId") == null) {
             return "redirect:/account/loginForm";
         }
 
@@ -244,5 +246,88 @@ public class AccountController {
         model.addAttribute("loginId", loginId);
 
         return "account/findLoginIdResult";
+    }
+
+    /**
+     * 비밀번호 찾기
+     * @return
+     */
+    @GetMapping("/findPw")
+    public String findPwForm(Model model) {
+        model.addAttribute("findPwForm", new FindPwForm());
+
+        return "account/findPw";
+    }
+
+    @PostMapping("/findPw")
+    public String findPw(@Validated(ValidationSequence.class) @ModelAttribute FindPwForm findPwForm, BindingResult result,
+                         RedirectAttributes redirectAttributes) {
+        // 1. 유효성 검사 - Redis 에 이메일 인증번호 동일한지 확인
+        validateAuthNum(findPwForm.getEmail(), findPwForm.getAuthNum(), result);
+
+        // 2. 유효성 검사
+        if(result.hasErrors()) {
+            result.addError(new ObjectError("findPwForm", null, null, "error"));
+            return "account/findPw";
+        }
+
+        // 3. 유효성 검사 - 일치하는 loginId, email이 있는지 체크
+        String loginId = findPwForm.getLoginId();
+        String email = findPwForm.getEmail();
+
+        try {
+            userService.findPassword(loginId, email);
+        } catch (IllegalStateException e) {
+            String message = e.getMessage();
+
+            if(message.contains("loginId")) {
+                result.rejectValue("loginId", "notFound");
+            } else if(message.contains("email")) {
+                result.rejectValue("email", "notFound");
+            } else {
+                result.rejectValue("loginId", "notFoundUser");
+            }
+        }
+
+        if(result.hasErrors()) {
+            result.addError(new ObjectError("findPwForm", null, null, "error"));
+            return "account/findPw";
+        }
+
+        // 임시 비밀번호 발급
+        String randomPassword = "";
+        try {
+            randomPassword = mailService.sendPwChangeMail(email);
+        } catch (MessagingException e) {
+            result.addError(new ObjectError("findPwForm", null, null, "error"));
+            return "account/findPw";
+        }
+
+        userService.changePassword(loginId, email, randomPassword);
+
+        // redis 에서 삭제
+        redisService.deleteEmailAuthNum(email);
+
+        redirectAttributes.addFlashAttribute("email", email);
+
+        return "redirect:/account/findPwResult";
+    }
+
+    /**
+     * 비밀번호 찾기 결과
+     * @return
+     */
+    @GetMapping("/findPwResult")
+    public String findPwResult(HttpServletRequest request, Model model) {
+        Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(flashMap == null || flashMap.get("email") == null) {
+            return "redirect:/account/loginForm";
+        }
+
+        String loginId = flashMap.get("email").toString();
+        model.addAttribute("email", loginId);
+
+        return "account/findPwResult";
     }
 }

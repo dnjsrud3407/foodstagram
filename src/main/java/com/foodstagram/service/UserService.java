@@ -87,37 +87,47 @@ public class UserService {
         return findedUser != null ? findedUser.getId() : null;
     }
 
-    public User findUser(String loginId) {
-        return userRepository.findByLoginId(loginId).orElse(null);
-    }
-
     /**
      * 아이디 찾기
      * @param email
      * @return
      */
     public String findLoginId(String email) {
-        String loginId = userRepository.findLoginIdByEmailAndIsDel(email, false).orElse(null);
-
-        if(loginId == null) {
-            throw new IllegalStateException("일치하는 회원이 없습니다.");
-        }
-
-        return loginId;
+        return userRepository.findLoginIdByEmailAndIsDel(email, false).orElseThrow(
+                () -> new IllegalStateException("일치하는 회원이 없습니다."));
     }
 
     /**
-     * 비밀번호 변경
-     * @param loginId
-     * @param newPassword
+     * 비밀번호 찾기
+     * - 아이디 확인
+     * - 이메일 확인
+     * - 아이디, 이메일 둘다 확인
      * @param email
+     * @return
+     */
+    public void findPassword(String loginId, String email) {
+        User findByLoginId = userRepository.findIsDelFalseUserByLoginId(loginId).orElseThrow(
+                () -> new IllegalStateException("notFound.findPwForm.loginId"));
+
+        userRepository.findLoginIdByEmailAndIsDel(email, false).orElseThrow(
+                () -> new IllegalStateException("notFound.findPwForm.email"));
+
+        if(!findByLoginId.getEmail().equals(email)) {
+            throw new IllegalStateException("notFoundUser");
+        }
+    }
+
+    /**
+     * 비밀번호 찾기 후 변경
+     * @param loginId
+     * @param email
+     * @param newPassword
      */
     @Transactional
-    public void changePassword(String loginId, String newPassword, String email) {
+    public void changePassword(String loginId, String email, String newPassword) {
         User findUser = userRepository.findByLoginIdAndEmailAndIsDel(loginId, email, false);
         if(findUser != null) {
-            String encodedPw = passwordEncoder.encode(newPassword);
-            findUser.changePassword(encodedPw);
+            findUser.changePassword(passwordEncoder.encode(newPassword));
         }
     }
 
