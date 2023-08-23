@@ -34,7 +34,7 @@
       <label for="email">이메일</label>
       <input type="text" id="email" th:field="*{email}" placeholder="이메일" required
              onchange="emailCheck()" th:classappend="${#fields.hasErrors('email')} ? 'fieldError'">
-      <input type="button" value="이메일 인증" onclick="emailAuth()">
+      <input type="button" id="emailSendBtn" value="이메일 인증" onclick="emailAuth()">
       <br>
       <input type="text" th:field="*{authNum}" placeholder="인증번호 입력" required onchange="authNumCheck()">
       <p class="text-error" id="emailErr" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
@@ -54,6 +54,7 @@
     var expiredEmail = "[(#{expired.emailCheckForm.authNum})]";
     var error = "[(#{error})]";
   </script>
-  <script th:src="@{/js/join.js}"></script>
+  <script th:src="@{/js/account/emailAuth.js}"></script>
+  <script th:src="@{/js/account/join.js}"></script>
 </body>
 </html>
