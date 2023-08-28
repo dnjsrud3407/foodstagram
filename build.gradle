@@ -38,7 +38,6 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 
-	runtimeOnly 'mysql:mysql-connector-java'
 	implementation 'com.oracle.database.jdbc:ojdbc10:19.18.0.0'
 	implementation 'com.oracle.database.security:osdt_cert'
 	implementation 'com.oracle.database.security:oraclepki'
