@@ -53,7 +53,7 @@ public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("localhost")
+                .host("144.24.91.13")
                 .port("8080")
                 .path("/oauth2Success")
                 .queryParams(queryParams)
