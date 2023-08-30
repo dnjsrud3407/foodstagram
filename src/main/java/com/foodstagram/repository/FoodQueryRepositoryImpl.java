@@ -94,7 +94,7 @@ public class FoodQueryRepositoryImpl implements FoodQueryRepository {
         List<FoodDto> content = queryFactory
                 .select(new QFoodDto(
                         food.id, food.storeName, food.score, food.title, food.visitDate,
-                        Expressions.stringTemplate("function('group_concat', {0})", category.name),
+                        Expressions.stringTemplate("LISTAGG({0}, ',') WITHIN GROUP(ORDER BY {1})", category.name, category.id),
                         new QFoodPictureDto(foodPicture.originalFileName, foodPicture.storedFileName)
                 ))
                 .from(food)
@@ -110,7 +110,7 @@ public class FoodQueryRepositoryImpl implements FoodQueryRepository {
                         eqListId(foodSearchDto.getListId()),
                         food.isDel.eq(false)
                 )
-                .groupBy(food.id, food.storeName, food.score, food.title, food.visitDate, foodPicture.originalFileName, foodPicture.storedFileName)
+                .groupBy(food.id, food.storeName, food.score, food.title, food.visitDate, food.createdDate, foodPicture.originalFileName, foodPicture.storedFileName)
                 .orderBy(searchOrderBy(foodSearchDto.getOrderBy()), food.createdDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
