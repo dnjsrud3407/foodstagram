@@ -45,14 +45,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String requestURI = request.getRequestURI();
 
-        // oauth2 로그인 성공한 경우 -> 쿠키 저장 후 메인 페이지 이동
-        if(requestURI.equals("/oauth2Success")) {
-            oauth2LoginSuccess(request, response);
-
-            response.sendRedirect("/");
-            return;
-        }
-
         try {
             System.out.println("인증이나 권한이 필요한 주소 요청");
 
@@ -149,14 +141,4 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     }
 
-    private void oauth2LoginSuccess(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String accessToken = request.getParameter(JwtProperties.ACCESS_TOKEN_COOKIE_NAME);
-        String refreshToken = request.getParameter(JwtProperties.REFRESH_TOKEN_COOKIE_NAME);
-
-        // Token cookie 에 저장
-        Cookie accessTokenCookie = jwtTokenService.createCookieToken(JwtProperties.ACCESS_TOKEN_COOKIE_NAME, accessToken);
-        Cookie refreshTokenCookie = jwtTokenService.createCookieToken(JwtProperties.REFRESH_TOKEN_COOKIE_NAME, refreshToken);
-        response.addCookie(accessTokenCookie);
-        response.addCookie(refreshTokenCookie);
-    }
 }
