@@ -81,7 +81,6 @@ public class FileStore {
 
         UploadManager.UploadResponse response = uploadManager.upload(uploadDetails);
         System.out.println(response);
-
         return new FoodPictureDto(originalFilename, storedFileName, isThumbnail);
     }
 
