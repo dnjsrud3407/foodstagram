@@ -38,10 +38,18 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 
+	// 오라클 클라우드 자율운영 데이터 베이스 ATP
 	implementation 'com.oracle.database.jdbc:ojdbc10:19.18.0.0'
 	implementation 'com.oracle.database.security:osdt_cert'
 	implementation 'com.oracle.database.security:oraclepki'
 	implementation 'com.oracle.database.security:osdt_core'
+
+	// 오라클 클라우드 버킷
+
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-addons-resteasy-client-configurator:3.24.0'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage:3.24.0'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey:3.23.2'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-bom:3.24.0'
 
 	// querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
