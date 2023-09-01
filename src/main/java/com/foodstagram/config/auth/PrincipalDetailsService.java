@@ -27,7 +27,7 @@ public class PrincipalDetailsService implements UserDetailsService {
         System.out.println("loginId = " + loginId);
 
         User user = userRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new InternalAuthenticationServiceException(ms.getMessage("notFound.user", null, null)));
+                .orElseThrow(() -> new UsernameNotFoundException(ms.getMessage("notFound.user", null, null)));
 
         return new PrincipalDetails(user);
     }

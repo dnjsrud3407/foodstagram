@@ -70,7 +70,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      * @param authResult the object returned from the <tt>attemptAuthentication</tt>
      */
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
         // access Token, refresh Token 생성 : HMAC 암호방식(secret 키 사용)
@@ -96,7 +96,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         // 로그인 실패 응답
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.setContentType("application/json;charset=utf-8");
@@ -104,12 +104,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sucess", false);
 
-        // 아이디가 틀린 경우
-        if(failed instanceof InternalAuthenticationServiceException) {
-            jsonObject.put("message", failed.getMessage());
-        } // 비밀번호가 틀린 경우
-        else if(failed instanceof BadCredentialsException) {
-            jsonObject.put("message", ms.getMessage("equal.user.password", null, null));
+        // 아이디, 비밀번호가 틀린 경우
+        if(failed instanceof BadCredentialsException) {
+            jsonObject.put("message", ms.getMessage("notFound.user", null, null));
         } else {
             jsonObject.put("message", failed.getMessage());
         }
