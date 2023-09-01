@@ -1,26 +1,16 @@
 package com.foodstagram.controller;
 
 import com.foodstagram.config.auth.PrincipalDetails;
-import com.foodstagram.config.jwt.JwtTokenService;
-import com.foodstagram.config.redis.RedisService;
 import com.foodstagram.controller.form.UserChangePwForm;
-import com.foodstagram.controller.form.UserJoinForm;
 import com.foodstagram.controller.validation.ValidationSequence;
 import com.foodstagram.dto.UserDto;
-import com.foodstagram.dto.UserJoinDto;
 import com.foodstagram.entity.User;
-import com.foodstagram.error.ErrorResult;
+import com.foodstagram.file.FileStore;
 import com.foodstagram.service.FoodService;
 import com.foodstagram.service.ListService;
 import com.foodstagram.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -30,8 +20,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 
 @Slf4j
 @Controller
@@ -43,6 +32,7 @@ public class UserController {
     private final FoodService foodService;
     private final ListService listService;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final FileStore fileStore;
 
     @GetMapping("/myPage")
     public String login(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
@@ -114,16 +104,15 @@ public class UserController {
 
     /**
      * 회원 탈퇴하기
+     * - 탈퇴시 사진 폴더 삭제
      * - 탈퇴 후 로그아웃 하기
      * @param deleteCheck
      * @param principalDetails
-     * @param request
-     * @param response
      * @return
      */
     @PostMapping("/delete")
     public String delete(@RequestParam(name = "deleteCheck") Boolean deleteCheck,
-                         @AuthenticationPrincipal PrincipalDetails principalDetails, HttpServletRequest request, HttpServletResponse response) {
+                         @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
         log.info("deleteCheck: {}", deleteCheck);
         // 탈퇴 동의 미체크 시
         if(!deleteCheck) {
@@ -134,6 +123,9 @@ public class UserController {
 
         // 탈퇴 작업
         userService.deleteUser(user.getId());
+
+        // 사진 폴더 삭제하기
+        fileStore.deleteFolder(user.getLoginId());
 
         // 로그아웃 하기
         return "redirect:/logout";

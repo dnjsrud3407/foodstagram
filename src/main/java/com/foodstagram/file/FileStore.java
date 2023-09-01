@@ -3,6 +3,7 @@ package com.foodstagram.file;
 import com.foodstagram.dto.FoodPictureDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -81,5 +82,18 @@ public class FileStore {
     public boolean isAvailableFile(String fileName) {
         String ext = extractExt(fileName);
         return availableExtList.contains(ext.toLowerCase());
+    }
+
+    /**
+     * 회원 탈퇴시 폴더 삭제
+     * @param loginId
+     * @throws IOException
+     */
+    public void deleteFolder(String loginId) throws IOException {
+        Path dirPath = Path.of(fileDir + loginId);
+
+        if(Files.isDirectory(dirPath)) {
+            FileSystemUtils.deleteRecursively(dirPath);
+        }
     }
 }
