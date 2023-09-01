@@ -37,7 +37,7 @@ public class FileStore {
 //        multipartFile.transferTo(new File(getFullPath(storedFileName)));
 
         ConfigFileReader.ConfigFile config =
-                ConfigFileReader.parse("import java.util.function.Supplier;\n", "DEFAULT");
+                ConfigFileReader.parse("/home/opc/.oci/config", "DEFAULT");
 
         AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(config);
 
