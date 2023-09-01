@@ -318,6 +318,7 @@ public class FoodController {
                        @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         log.info("list");
         Long userId = principalDetails.getUser().getId();
+        String loginId = principalDetails.getUser().getLoginId();
 
         if(foodSearchDto == null) {
             foodSearchDto = new FoodSearchDto();
@@ -340,6 +341,7 @@ public class FoodController {
         model.addAttribute("foodSearchDto", foodSearchDto);
         model.addAttribute("foodList", foodList.getContent());
         model.addAttribute("paging", paging);
+        model.addAttribute("loginId", loginId);
 
         return "food/list";
     }

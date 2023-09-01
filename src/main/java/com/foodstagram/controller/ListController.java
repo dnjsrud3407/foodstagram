@@ -159,6 +159,8 @@ public class ListController {
     public String detail(@PathVariable Long listId, @PageableDefault(page = 0, size = 5) Pageable pageable,
                          @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         Long userId = principalDetails.getUser().getId();
+        String loginId = principalDetails.getUser().getLoginId();
+
         FoodSearchDto foodSearchDto = new FoodSearchDto(listId);
 
         Page<FoodDto> foodList = foodService.searchFoods(foodSearchDto, userId, pageable);
@@ -171,6 +173,7 @@ public class ListController {
         model.addAttribute("foodList", foodList);
         model.addAttribute("listsDto", listsDto);
         model.addAttribute("paging", paging);
+        model.addAttribute("loginId", loginId);
 
         return "list/detail";
     }
