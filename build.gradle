@@ -54,7 +54,6 @@ dependencies {
 	implementation 'com.oracle.oci.sdk:oci-java-sdk-common:2.8.1'
 	implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage-generated:2.8.1'
 	implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage:2.8.1'
-	implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey:2.8.1'
 
 	implementation 'org.glassfish.jersey.core:jersey-client:2.34'
 	implementation 'org.glassfish.jersey.core:jersey-common:2.34'
