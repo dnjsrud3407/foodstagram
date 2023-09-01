@@ -63,7 +63,7 @@ public class FoodController {
 
     @PostMapping("/create")
     public String createFood(@Validated @ModelAttribute FoodCreateForm foodCreateForm, BindingResult result,
-                             @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, RedirectAttributes redirectAttributes) throws IOException {
+                             @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, RedirectAttributes redirectAttributes) throws Exception {
         Long userId = principalDetails.getUser().getId();
 
         // 유효성 검사
@@ -136,7 +136,7 @@ public class FoodController {
      * @return
      * @throws IOException
      */
-    private List<FoodPictureDto> saveFoodPicture(MultipartFile thumbnail, List<MultipartFile> formFoodPictures) throws IOException {
+    private List<FoodPictureDto> saveFoodPicture(MultipartFile thumbnail, List<MultipartFile> formFoodPictures) throws Exception {
         List<FoodPictureDto> foodPictureDtos = new ArrayList<>();
 
         FoodPictureDto savedThumbnailDto = fileStore.storeFile(thumbnail, true);
@@ -201,7 +201,7 @@ public class FoodController {
 
     @PostMapping("/modify/{foodId}")
     public String modifyFood(@Validated @ModelAttribute FoodModifyForm foodModifyForm, BindingResult result,
-                             @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, @PathVariable Long foodId) throws IOException {
+                             @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, @PathVariable Long foodId) throws Exception {
         Long userId = principalDetails.getUser().getId();
 
         // 유효성 검사

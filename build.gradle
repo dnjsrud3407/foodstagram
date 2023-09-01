@@ -45,11 +45,22 @@ dependencies {
 	implementation 'com.oracle.database.security:osdt_core'
 
 	// 오라클 클라우드 버킷
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-addons-resteasy-client-configurator:2.8.1'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-workrequests:2.8.1'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-filestorage:2.8.1'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-audit:2.8.1'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-core:2.8.1'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-database:2.8.1'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-common:2.8.1'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage-generated:2.8.1'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage:2.8.1'
+	implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey:2.8.1'
 
-	implementation 'com.oracle.oci.sdk:oci-java-sdk-addons-resteasy-client-configurator:3.24.0'
-	implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage:3.24.0'
-	implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey:3.23.2'
-	implementation 'com.oracle.oci.sdk:oci-java-sdk-bom:3.24.0'
+	implementation 'org.glassfish.jersey.core:jersey-client:2.34'
+	implementation 'org.glassfish.jersey.core:jersey-common:2.34'
+	implementation 'org.glassfish.jersey.ext:jersey-entity-filtering:2.34'
+	implementation 'org.glassfish.jersey.inject:jersey-hk2:2.34'
+	implementation 'org.glassfish.jersey.media:jersey-media-json-jackson:2.34'
 
 	// querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
