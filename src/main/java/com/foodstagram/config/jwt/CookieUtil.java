@@ -23,6 +23,7 @@ public class CookieUtil {
         // TODO: https 수정
 //        cookie.setSecure(true); 
         cookie.setMaxAge(maxAge/1000);
+        cookie.setPath("/");
         return cookie;
     }
 

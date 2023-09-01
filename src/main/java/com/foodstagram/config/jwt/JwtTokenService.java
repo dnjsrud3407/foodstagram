@@ -116,7 +116,6 @@ public class JwtTokenService {
      */
     public Cookie createCookieToken(String cookieName, String jwtToken) throws UnsupportedEncodingException {
         Cookie tokenCookie = CookieUtil.createTokenCookie(cookieName, jwtToken, JwtProperties.COOKIE_MAX_AGE);
-        tokenCookie.setPath("/");
         return tokenCookie;
     }
 
