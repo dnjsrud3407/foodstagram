@@ -1,18 +1,14 @@
 package com.foodstagram.file;
 
 import com.foodstagram.dto.FoodPictureDto;
-import com.oracle.bmc.ConfigFileReader;
-import com.oracle.bmc.Region;
-import com.oracle.bmc.auth.AuthenticationDetailsProvider;
-import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
-import com.oracle.bmc.objectstorage.ObjectStorage;
-import com.oracle.bmc.objectstorage.ObjectStorageClient;
-import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 @Component
@@ -23,71 +19,37 @@ public class FileStore {
 
     private List<String> availableExtList = Arrays.asList("jfif", "pjpeg", "jpeg", "pjp", "jpg", "png", "gif");
 
-    public String getFullPath(String filename) {
-        return fileDir + filename;
+    /**
+     * 사용자 별 폴더 > 사진 저장한다.
+     * 폴더가 없다면 생성해준다.
+     * @param loginId
+     * @param filename
+     * @return
+     * @throws IOException
+     */
+    public String getFullPath(String loginId, String filename) throws IOException {
+        Path dirPath = Path.of(fileDir + loginId);
+        if(!Files.isDirectory(dirPath)) {
+            Files.createDirectory(dirPath);
+        }
+        return fileDir + loginId + "/" + filename;
     }
 
-    public FoodPictureDto storeFile(MultipartFile multipartFile, boolean isThumbnail) throws Exception {
+    public FoodPictureDto storeFile(String loginId, MultipartFile multipartFile, boolean isThumbnail) throws IOException {
         if(multipartFile == null || multipartFile.isEmpty()) {
             return null;
         }
 
         String originalFilename = multipartFile.getOriginalFilename();
         String storedFileName = createStoreFileName(originalFilename);
-//        multipartFile.transferTo(new File(getFullPath(storedFileName)));
 
-        ConfigFileReader.ConfigFile config =
-                ConfigFileReader.parse("/home/opc/.oci/config", "DEFAULT");
-
-        AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(config);
-
-        ObjectStorage client = new ObjectStorageClient(provider);
-        client.setRegion(Region.AP_CHUNCHEON_1);
-
-//        UploadConfiguration uploadConfiguration =
-//                UploadConfiguration.builder()
-//                        .allowMultipartUploads(true)
-//                        .allowParallelUploads(true)
-//                        .build();
-//
-//        UploadManager uploadManager = new UploadManager(client, uploadConfiguration);
-
-        String namespaceName = "axewvmfa4ckn";
-        String bucketName = "foodstagram-bucket";
-        String objectName = storedFileName;
-        Map<String, String> metadata = null;
-        String contentType = multipartFile.getContentType();
-
-        String contentEncoding = null;
-        String contentLanguage = null;
-
-        InputStream inputStream = multipartFile.getInputStream();
-//        File body = new File(storedFileName);
-
-        PutObjectRequest request =
-                PutObjectRequest.builder()
-                        .namespaceName(namespaceName)
-                        .bucketName(bucketName)
-                        .objectName(storedFileName)
-                        .contentType(contentType)
-                        .contentLength(multipartFile.getSize())
-                        .putObjectBody(inputStream)
-                        .build();
-
-//        UploadManager.UploadRequest uploadDetails =
-//                UploadManager.UploadRequest.builder(body).allowOverwrite(true).build(request);
-//
-//        UploadManager.UploadResponse response = uploadManager.upload(uploadDetails);
-//        System.out.println(response);
-
-        // upload file
-        client.putObject(request);
-        client.close();
+        File file = new File(getFullPath(loginId, storedFileName));
+        multipartFile.transferTo(file);
 
         return new FoodPictureDto(originalFilename, storedFileName, isThumbnail);
     }
 
-    public List<FoodPictureDto> storeFile(List<MultipartFile> multipartFile, boolean isThumbnail) throws Exception {
+    public List<FoodPictureDto> storeFile(String loginId, List<MultipartFile> multipartFile, boolean isThumbnail) throws IOException {
         List<FoodPictureDto> foodPictureDtos = new ArrayList<>();
 
         if(multipartFile == null) {
@@ -95,7 +57,7 @@ public class FileStore {
         }
 
         for (MultipartFile file : multipartFile) {
-            foodPictureDtos.add(storeFile(file, isThumbnail));
+            foodPictureDtos.add(storeFile(loginId, file, isThumbnail));
         }
 
         return foodPictureDtos;

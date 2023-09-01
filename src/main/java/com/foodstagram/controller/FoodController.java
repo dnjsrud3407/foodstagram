@@ -63,8 +63,9 @@ public class FoodController {
 
     @PostMapping("/create")
     public String createFood(@Validated @ModelAttribute FoodCreateForm foodCreateForm, BindingResult result,
-                             @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, RedirectAttributes redirectAttributes) throws Exception {
+                             @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, RedirectAttributes redirectAttributes) throws IOException {
         Long userId = principalDetails.getUser().getId();
+        String loginId = principalDetails.getUser().getLoginId();
 
         // 유효성 검사
         validate(result);
@@ -79,7 +80,7 @@ public class FoodController {
         }
 
         // 파일 서버에 저장
-        List<FoodPictureDto> foodPictureDtos = saveFoodPicture(foodCreateForm.getThumbnail(), foodCreateForm.getFoodPictures());
+        List<FoodPictureDto> foodPictureDtos = saveFoodPicture(loginId, foodCreateForm.getThumbnail(), foodCreateForm.getFoodPictures());
 
         FoodCreateDto foodCreateDto = new FoodCreateDto(foodCreateForm);
 
@@ -136,15 +137,15 @@ public class FoodController {
      * @return
      * @throws IOException
      */
-    private List<FoodPictureDto> saveFoodPicture(MultipartFile thumbnail, List<MultipartFile> formFoodPictures) throws Exception {
+    private List<FoodPictureDto> saveFoodPicture(String loginId, MultipartFile thumbnail, List<MultipartFile> formFoodPictures) throws IOException {
         List<FoodPictureDto> foodPictureDtos = new ArrayList<>();
 
-        FoodPictureDto savedThumbnailDto = fileStore.storeFile(thumbnail, true);
+        FoodPictureDto savedThumbnailDto = fileStore.storeFile(loginId, thumbnail, true);
         if(savedThumbnailDto != null) {
             foodPictureDtos.add(savedThumbnailDto);
         }
 
-        List<FoodPictureDto> savedFoodPictureDtos = fileStore.storeFile(formFoodPictures, false);
+        List<FoodPictureDto> savedFoodPictureDtos = fileStore.storeFile(loginId, formFoodPictures, false);
         if(savedFoodPictureDtos != null && savedFoodPictureDtos.size() > 0) {
             foodPictureDtos.addAll(savedFoodPictureDtos);
         }
@@ -201,8 +202,9 @@ public class FoodController {
 
     @PostMapping("/modify/{foodId}")
     public String modifyFood(@Validated @ModelAttribute FoodModifyForm foodModifyForm, BindingResult result,
-                             @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, @PathVariable Long foodId) throws Exception {
+                             @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, @PathVariable Long foodId) throws IOException {
         Long userId = principalDetails.getUser().getId();
+        String loginId = principalDetails.getUser().getLoginId();
 
         // 유효성 검사
         validate(result);
@@ -242,7 +244,7 @@ public class FoodController {
         // 파일 서버에 저장
         List<FoodPictureDto> foodPictureDtos = null;
         if(isThumbnailChange || isFoodPicturesChange) {
-            foodPictureDtos = saveFoodPicture(foodModifyForm.getThumbnail(), foodModifyForm.getFoodPictures());
+            foodPictureDtos = saveFoodPicture(loginId, foodModifyForm.getThumbnail(), foodModifyForm.getFoodPictures());
         }
 
         FoodModifyDto foodModifyDto = new FoodModifyDto(foodModifyForm, isThumbnailChange, isFoodPicturesChange);
