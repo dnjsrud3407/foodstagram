@@ -171,10 +171,12 @@ public class FoodController {
      * @return
      */
     @GetMapping("/{foodId}")
-    public String foodDetail(@PathVariable Long foodId, Model model) {
+    public String foodDetail(@PathVariable Long foodId, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         FoodDto food = foodService.findFood(foodId);
+        String loginId = principalDetails.getUser().getLoginId();
 
         model.addAttribute("food", food);
+        model.addAttribute("loginId", loginId);
         model.addAttribute("kakaoAPI", kakao_api);
 
         return "food/detail";

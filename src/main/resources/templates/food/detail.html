@@ -68,7 +68,7 @@
             <div style="display: inline-block; float: left; width: 450px;">
                 <div class="thumbDiv">
                     <div class="preview" th:each="foodPicture : ${food.foodPictureDtos}">
-                        <img id="preview-thumbnail" class="w200" th:src="|/picture/${foodPicture.storedFileName}|">
+                        <img id="preview-thumbnail" class="w200" th:src="|/picture/${loginId}/${foodPicture.storedFileName}|">
                     </div>
                 </div>
             </div>
