@@ -77,7 +77,7 @@
                 <div class="thumbDiv">
                     <div class="preview">
                         <img id="preview-thumbnail" class="w200"
-                             th:src="${not #strings.isEmpty(foodModifyForm.oldThumbnailName)} ? |/picture/${foodModifyForm.oldThumbnailName}| : |https://dummyimage.com/200x250/fff/000&text=image|">
+                             th:src="${not #strings.isEmpty(foodModifyForm.oldThumbnailName)} ? |/picture/${loginId}/${foodModifyForm.oldThumbnailName}| : |https://dummyimage.com/200x250/fff/000&text=image|">
                     </div>
                     <label class="fileLabel">
                         <input type="file" id="thumbnail" th:field="*{thumbnail}" accept="image/jpeg, image/png, image/gif" required
@@ -92,7 +92,7 @@
             <!-- 추가 FoodPicture -->
             <div style="display: inline-block; float: left;">
                 <div th:each="pictureName, index : ${foodModifyForm.oldFoodFileNames}" class="preview">
-                    <img th:id="|preview-picture${index.count}|" class="w200" th:src="|/picture/${pictureName}|">
+                    <img th:id="|preview-picture${index.count}|" class="w200" th:src="|/picture/${loginId}/${pictureName}|">
                 </div>
                 <div class="preview" th:each="i : ${#numbers.sequence(#lists.size(foodModifyForm.oldFoodFileNames)+1,4)}" th:if="${#lists.size(foodModifyForm.oldFoodFileNames) < 4}">
                     <img th:id="|preview-picture${i}|" class="w200" src="https://dummyimage.com/200x250/fff/000&text=image">

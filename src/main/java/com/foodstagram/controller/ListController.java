@@ -42,6 +42,7 @@ public class ListController {
     public String list(@PageableDefault(page = 0, size = 10) Pageable pageable,
                        @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         Long userId = principalDetails.getUser().getId();
+        String loginId = principalDetails.getUser().getLoginId();
 
         Page<ListsDto> lists = listService.findLists(userId, pageable);
         MyPage paging = new MyPage(lists);
@@ -49,6 +50,7 @@ public class ListController {
         model.addAttribute("totalCount", lists.getTotalElements());
         model.addAttribute("lists", lists);
         model.addAttribute("paging", paging);
+        model.addAttribute("loginId", loginId);
 
         return "list/list";
     }

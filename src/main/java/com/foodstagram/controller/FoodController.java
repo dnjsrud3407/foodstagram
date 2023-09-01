@@ -191,6 +191,8 @@ public class FoodController {
     public String modifyFood(@PathVariable Long foodId, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         log.info("modifyFood");
         Long userId = principalDetails.getUser().getId();
+        String loginId = principalDetails.getUser().getLoginId();
+
         FoodDto foodDto = foodService.findFood(foodId);
         FoodModifyForm foodModifyForm = new FoodModifyForm(foodDto);
 
@@ -198,6 +200,7 @@ public class FoodController {
 
         model.addAttribute("foodModifyForm", foodModifyForm);
         model.addAttribute("lists", lists);
+        model.addAttribute("loginId", loginId);
 
         return "food/modifyForm";
     }
