@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <link th:href="@{/css/common.css}" rel="stylesheet" />
-</head>
+<!-- Header -->
+<div th:replace="~{fragment/header :: header-account}"></div>
 <body>
-로그인
-<form id="form">
-  <div>
-    <label for="loginId">아이디</label>
-    <input type="text" id="loginId" placeholder="아이디" onkeyup="enterKey()">
+  <div class="center div-login-logo">
+    <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
   </div>
-  <div>
-    <label for="password">비밀번호</label>
-    <input type="password" id="password" placeholder="비밀번호" autocomplete="off" onkeyup="enterKey()">
-  </div>
-  <div>
-    <p id="globalErr" class="text-error"></p>
-    <input type="button" onclick="login()" value="로그인">
-  </div>
-  <div>
-    <a th:href="@{/oauth2/authorization/kakao}"><img th:src="@{/image/kakao_login_medium_wide.png}"></a><br>
-    <a th:href="@{/account/findLoginId}" class="link">아이디 찾기</a>
-    <a th:href="@{/account/findPw}" class="link">비밀번호 찾기</a>
-    <a th:href="@{/account/join}" class="link">회원가입</a>
-  </div>
-</form>
-<script th:inline="javascript">
-    var requiredLoginId = "[(#{required.user.loginId})]";
-    var requiredPassword = "[(#{required.user.password})]";
-</script>
-<script th:src="@{/js/login.js}"></script>
+  <section id="loginSection">
+    <form id="form">
+      <div>
+        <label for="loginId">아이디</label>
+        <input type="text" id="loginId" placeholder="아이디" onkeyup="enterKey()" class="form-control">
+      </div>
+      <div>
+        <label for="password">비밀번호</label>
+        <input type="password" id="password" placeholder="비밀번호" autocomplete="off" onkeyup="enterKey()" class="form-control">
+      </div>
+      <div>
+        <p id="globalErr" class="text-error"></p>
+      </div>
+      <div>
+        <input type="button" onclick="login()" value="로그인" class="btn btn-dark btn-login">
+        <a th:href="@{/oauth2/authorization/kakao}"><img th:src="@{/image/kakao_login_medium_wide.png}"></a><br>
+      </div>
+      <div class="center">
+        <a th:href="@{/account/findLoginId}" class="link mr0p4r">아이디 찾기</a>
+        <a th:href="@{/account/findPw}" class="link mr0p4r">비밀번호 찾기</a>
+        <a th:href="@{/account/join}" class="link mr0p4r">회원가입</a>
+      </div>
+    </form>
+  </section>
+  <script th:inline="javascript">
+      var requiredLoginId = "[(#{required.user.loginId})]";
+      var requiredPassword = "[(#{required.user.password})]";
+  </script>
+  <script th:src="@{/js/login.js}"></script>
 </body>
 </html>

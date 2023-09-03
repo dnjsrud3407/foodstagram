@@ -1,51 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <link th:href="@{/css/common.css}" rel="stylesheet" />
-</head>
+<!-- Header -->
+<div th:replace="~{fragment/header :: header-account}"></div>
 <body>
-  회원가입
-  <form name="form" th:action th:object="${userJoinForm}" th:method="post" onsubmit="return checkForm()">
-    <div>
-      <label for="loginId">아이디</label>
-      <input type="text" id="loginId" th:field="*{loginId}" placeholder="아이디" required
-             onchange="loginIdCheck()" th:classappend="${#fields.hasErrors('loginId')} ? 'fieldError'">
-      <p class="text-error" id="loginIdErr" th:if="${#fields.hasErrors('loginId')}" th:errors="*{loginId}"></p>
-      <p id="checkLoginIdResult" class="text-error"></p>
-    </div>
-    <div>
-      <label for="password">비밀번호</label>
-      <input type="password" id="password" th:field="*{password}" placeholder="비밀번호" autocomplete="off" required
-             onchange="passwordCheck()" th:classappend="${#fields.hasErrors('password')} ? 'fieldError'">
-      <p class="text-error" id="passwordErr" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-      <p id="checkPasswordResult" class="text-error"></p>
-    </div>
-    <div>
-      <label for="passwordConfirm">비밀번호 확인</label>
-      <input type="password" id="passwordConfirm" th:field="*{passwordConfirm}" placeholder="비밀번호 확인" autocomplete="off"
-             onchange="passwordConfirmCheck()" th:classappend="${#fields.hasErrors('passwordConfirm')} ? 'fieldError'" required>
-      <p class="text-error" id="passwordConfirmErr" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></p>
-      <p id="checkPasswordConfirmResult" class="text-error"></p>
-    </div>
-    <div>
-      <label for="email">이메일</label>
-      <input type="text" id="email" th:field="*{email}" placeholder="이메일" required
-             onchange="emailCheck()" th:classappend="${#fields.hasErrors('email')} ? 'fieldError'">
-      <input type="button" id="emailSendBtn" value="이메일 인증" onclick="emailAuth()">
-      <br>
-      <input type="text" th:field="*{authNum}" placeholder="인증번호 입력" required onchange="authNumCheck()">
-      <p class="text-error" id="emailErr" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
-      <p class="text-error" id="authNumErr" th:if="${#fields.hasErrors('authNum')}" th:errors="*{authNum}"></p>
-      <p id="checkEmailResult" class="text-error"></p>
-    </div>
-    <div>
-      <p id="globalErr" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}"></p>
-      <input type="submit" value="회원가입">
-    </div>
-  </form>
+  <div class="center div-logo">
+    <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
+  </div>
+  <section id="joinSection">
+    <form name="form" th:action th:object="${userJoinForm}" th:method="post" onsubmit="return checkForm()">
+      <h4 class="title">회원가입</h4>
+      <div>
+        <label for="loginId">아이디</label>
+        <input type="text" id="loginId" th:field="*{loginId}" placeholder="아이디" required
+               onchange="loginIdCheck()" th:classappend="${#fields.hasErrors('loginId')} ? 'fieldError'" class="form-control">
+        <p class="text-error" id="loginIdErr" th:if="${#fields.hasErrors('loginId')}" th:errors="*{loginId}"></p>
+        <p id="checkLoginIdResult" class="text-error"></p>
+      </div>
+      <div>
+        <label for="password">비밀번호</label>
+        <input type="password" id="password" th:field="*{password}" placeholder="비밀번호" autocomplete="off" required
+               onchange="passwordCheck()" th:classappend="${#fields.hasErrors('password')} ? 'fieldError'" class="form-control">
+        <p class="text-error" id="passwordErr" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+        <p id="checkPasswordResult" class="text-error"></p>
+      </div>
+      <div>
+        <label for="passwordConfirm">비밀번호 확인</label>
+        <input type="password" id="passwordConfirm" th:field="*{passwordConfirm}" placeholder="비밀번호 확인" autocomplete="off"
+               onchange="passwordConfirmCheck()" th:classappend="${#fields.hasErrors('passwordConfirm')} ? 'fieldError'" required class="form-control">
+        <p class="text-error" id="passwordConfirmErr" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></p>
+        <p id="checkPasswordConfirmResult" class="text-error"></p>
+      </div>
+      <div>
+        <label for="email">이메일</label><br>
+        <input type="text" id="email" th:field="*{email}" placeholder="이메일" required
+               onchange="emailCheck()" th:classappend="${#fields.hasErrors('email')} ? 'fieldError'" class="form-control input-email">
+        <input type="button" id="emailSendBtn" value="이메일 인증" onclick="emailAuth()" class="btn btn-outline-dark btn-auth">
+        <div style="clear: both;"></div>
+        <input type="text" th:field="*{authNum}" placeholder="인증번호 입력" required onchange="authNumCheck()" class="form-control">
+        <p class="text-error" id="emailErr" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+        <p class="text-error" id="authNumErr" th:if="${#fields.hasErrors('authNum')}" th:errors="*{authNum}"></p>
+        <p id="checkEmailResult" class="text-error"></p>
+      </div>
+      <div>
+        <p id="globalErr" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}"></p>
+        <input type="submit" value="회원가입" class="btn btn-dark btn-login">
+      </div>
+    </form>
+  </section>
   <script th:inline="javascript">
     var formatLoginId = "[(#{format.loginId})]";
     var formatPassword = "[(#{format.password})]";

@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link th:href="@{/css/common.css}" rel="stylesheet" />
-</head>
+<!-- Header -->
+<div th:replace="~{fragment/header :: header-index}"></div>
 <body>
-홈페이지
-<a sec:authorize="isAnonymous()" th:href="@{/account/loginForm}" class="link">로그인</a>
-<a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="link">로그아웃</a>
-<a sec:authorize="isAuthenticated()" th:href="@{/food/list}" class="link">리스트</a>
-<a sec:authorize="isAuthenticated()" th:href="@{/user/myPage}" class="link">마이페이지</a>
+    <div class="center div-logo">
+        <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
+    </div>
+    <div class="right w97p">
+        <a sec:authorize="isAnonymous()" th:href="@{/account/loginForm}" class="link mr0p2r">로그인</a>
+        <a sec:authorize="isAnonymous()" th:href="@{/account/join}" class="link">회원가입</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/food/list}" class="link mr0p2r">게시글</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/user/myPage}" class="link mr0p2r">마이페이지</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="link">로그아웃</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/category/list}" class="link">[관리자 페이지] 카테고리</a>
+    </div>
 </body>
 </html>

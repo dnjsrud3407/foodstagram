@@ -1,16 +1,78 @@
+html, body {
+  height: 100%;
+}
+
+.w150 {
+  width: 150px;
+}
+
 .w200 {
   width: 200px;
+}
+
+.mt2p {
+  margin-top: 2%;
+}
+
+.mt12p {
+  margin-top: 12%;
 }
 
 .m3p {
   margin: 3% !important;
 }
 
+.mr0p2r {
+  margin-right: 0.2rem;
+}
+
+.mr0p4r {
+  margin-right: 0.4rem;
+}
+
+.mr0p5r {
+  margin-right: 0.5rem;
+}
+
 .mr1r {
   margin-right: 1rem;
 }
 
+.ml0p5r {
+  margin-left: 0.5rem;
+}
+
+.inlineLeft {
+  display: inline-block;
+  float: left;
+}
+
+.inlineRight {
+  display: inline-block;
+  float: right;
+}
+
+/* width */
+.w97p {
+  width: 97%;
+}
+
+.w100p {
+  width: 100%;
+}
+
 /* font 속성 */
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+.fw-600 {
+  font-weight: 600;
+}
+
 .fw-bold {
   font-weight: bold;
 }
@@ -34,6 +96,12 @@
   margin: 0.3rem 0 0.6rem 0.3rem
 }
 
+.text-ok{
+  color: #018244;
+  font-size: 0.8rem;
+  margin: 0.3rem 0 0.6rem 0.3rem
+}
+
 .link {
   opacity: 0.65;
   color: inherit;
@@ -48,4 +116,31 @@
 
 .disabled {
   pointer-events: none;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.form-control {
+  margin-bottom: 2%;
+}
+
+/* 로고 이미지 */
+.div-login-logo {
+  padding-top: 12%;
+}
+
+.div-logo {
+  padding-top: 2%;
+  padding-bottom: 1%;
+  background-color: white;
+}
+
+.img-logo {
+  cursor: pointer;
 }

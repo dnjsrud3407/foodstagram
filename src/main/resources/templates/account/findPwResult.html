@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <link th:href="@{/css/common.css}" rel="stylesheet" />
-</head>
+<!-- Header -->
+<div th:replace="~{fragment/header :: header-account}"></div>
 <body>
-  임시 비밀번호 발급
-  <div>
-    인증한 이메일 <span th:text="${email}"></span>로 임시 비밀번호를 발급하였습니다.<br>
-    이메일을 확인해주세요.
+  <div class="center div-logo">
+    <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
   </div>
-  <div>
-    <a th:href="@{/account/loginForm}" class="link">로그인</a>
-  </div>
+  <section class="findSection">
+    <form>
+      <h4 class="title">임시 비밀번호 발급</h4>
+      <div class="findResult">
+        인증한 이메일 <span th:text="${email}" class="fw-bold"></span>로<br>
+        임시 비밀번호를 발급하였습니다.<br>
+        이메일을 확인해주세요.
+      </div>
+      <div>
+        <input type="button" value="로그인" th:onclick="|location.href='@{/account/loginForm}'|" class="btn btn-dark btn-login">
+      </div>
+    </form>
+  </section>
 </body>
 </html>

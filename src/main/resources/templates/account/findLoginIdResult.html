@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <link th:href="@{/css/common.css}" rel="stylesheet" />
-</head>
+<!-- Header -->
+<div th:replace="~{fragment/header :: header-account}"></div>
 <body>
-  아이디 찾기
-  <div>
-    인증한 이메일로 가입된 아이디는 <span th:text="${loginId}"></span> 입니다.
+  <div class="center div-logo">
+    <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
   </div>
-  <div>
-    <a th:href="@{/account/loginForm}" class="link">로그인</a>
-    <a th:href="@{/account/findPw}" class="link">비밀번호 찾기</a>
-    <a th:href="@{/account/join}" class="link">회원가입</a>
-  </div>
+  <section class="findSection">
+    <form>
+      <h4 class="title">아이디 찾기</h4>
+      <div class="findResult">
+        인증한 이메일로 가입된 아이디는 <br>
+        <span th:text="${loginId}" class="fw-bold"></span> 입니다.
+      </div>
+      <div>
+        <input type="button" value="로그인" th:onclick="|location.href='@{/account/loginForm}'|" class="btn btn-dark btn-login">
+      </div>
+      <div class="center">
+        <a th:href="@{/account/findPw}" class="link mr0p4r">비밀번호 찾기</a>
+        <a th:href="@{/account/join}" class="link mr0p4r">회원가입</a>
+      </div>
+    </form>
+  </section>
 </body>
 </html>
