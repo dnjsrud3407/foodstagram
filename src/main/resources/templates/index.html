@@ -12,7 +12,6 @@
         <a sec:authorize="isAnonymous()" th:href="@{/account/join}" class="link">회원가입</a>
         <a sec:authorize="isAuthenticated()" th:href="@{/food/list}" class="link mr0p2r">게시글</a>
         <a sec:authorize="isAuthenticated()" th:href="@{/user/myPage}" class="link mr0p2r">마이페이지</a>
-        <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="link">로그아웃</a>
         <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/category/list}" class="link">[관리자 페이지] 카테고리</a>
     </div>
 </body>
