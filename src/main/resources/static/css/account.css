@@ -44,8 +44,11 @@
     place-items: center;
 }
 
+.findSection form {
+    width: 100%;
+}
+
 .findResult {
     text-align: center;
     margin: 20% 0 15% 0;
-    width: 350px;
 }

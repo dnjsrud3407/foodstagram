@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <link th:href="@{/css/common.css}" rel="stylesheet" />
-</head>
+<!-- Header -->
+<div th:replace="~{fragment/header :: header-account}"></div>
 <body>
-탈퇴하기
-<section>
-  <form th:action th:method="post">
-    <div>
-      회원탈퇴 시 작성한 게시글은 모두 사라집니다.
-      회원탈퇴를 진행하시겠습니까?
-    </div>
-    <div>
-      <input type="checkbox" id="deleteCheck" name="deleteCheck" required>
-      <label for="deleteCheck">위 내용 확인 후 회원탈퇴를 진행합니다.</label>
-      <br>
-      <input type="submit" value="탈퇴하기">
-      <input type="button" onclick="javascript:history.back();" value="취소">
-    </div>
-  </form>
-</section>
+  <div class="center div-logo">
+    <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
+  </div>
+  <div class="right w97p">
+    <a th:href="@{/food/list}" class="link mr0p2r">게시글</a>
+    <a th:href="@{/user/myPage}" class="link mr0p2r">마이페이지</a>
+  </div>
+  <section class="findSection">
+    <form th:action th:method="post">
+      <h4 class="title">회원탈퇴</h4>
+      <div class="findResult">
+        회원탈퇴 시 작성한 게시글은 모두 사라집니다.<br>
+        회원탈퇴를 진행하시겠습니까?<br><br>
+        <input type="checkbox" id="deleteCheck" name="deleteCheck" required>
+        <label for="deleteCheck">위 내용 확인 후 회원탈퇴를 진행합니다.</label>
+      </div>
+      <div>
+        <input type="submit" value="탈퇴하기" class="btn btn-dark btn-full">
+        <input type="button" onclick="javascript:history.back();" value="취소" class="btn btn-outline-dark btn-full">
+      </div>
+    </form>
+  </section>
 </body>
 </html>

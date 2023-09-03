@@ -1,46 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <link th:href="@{/css/common.css}" rel="stylesheet" />
-</head>
+<!-- Header -->
+<div th:replace="~{fragment/header :: header-account}"></div>
 <body>
-비밀번호 변경
-<section>
-  <form name="form" th:action th:object="${userChangePwForm}" th:method="post" onsubmit="return checkForm()">
-    <div>
-      <label for="password">현재 비밀번호</label>
-      <input type="password" id="password" th:field="*{password}" placeholder="현재 비밀번호" autocomplete="off" required
-             th:classappend="${#fields.hasErrors('password')} ? 'fieldError'">
-      <p class="text-error" id="passwordErr" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-    </div>
-    <div>
-      <label for="newPassword">새 비밀번호</label>
-      <input type="password" id="newPassword" th:field="*{newPassword}" placeholder="새 비밀번호" autocomplete="off" required
-             onchange="newPasswordCheck()" th:classappend="${#fields.hasErrors('newPassword')} ? 'fieldError'">
-      <p class="text-error" id="newPasswordErr" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}"></p>
-      <p id="checkNewPasswordResult" class="text-error"></p>
-    </div>
-    <div>
-      <label for="newPasswordConfirm">새 비밀번호 확인</label>
-      <input type="password" id="newPasswordConfirm" th:field="*{newPasswordConfirm}" placeholder="새 비밀번호 확인" autocomplete="off"
-             onchange="newPasswordConfirmCheck()" th:classappend="${#fields.hasErrors('newPasswordConfirm')} ? 'fieldError'" required>
-      <p class="text-error" id="newPasswordConfirmErr" th:if="${#fields.hasErrors('newPasswordConfirm')}" th:errors="*{newPasswordConfirm}"></p>
-      <p id="checkNewPasswordConfirmResult" class="text-error"></p>
-    </div>
-    <div>
-      <p id="globalErr" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}"></p>
-      <input type="submit" value="확인">
-      <input type="button" onclick="javascript:history.back();" value="취소">
-    </div>
-  </form>
-</section>
-<script th:inline="javascript">
-  var formatPassword = "[(#{format.password})]";
-  var equalNewPasswordConfirm = "[(#{equal.userChangePwForm.newPasswordConfirm})]";
-</script>
-<script th:src="@{/js/user.js}"></script>
+  <div class="center div-logo">
+    <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
+  </div>
+  <div class="right w97p">
+    <a th:href="@{/food/list}" class="link mr0p2r">게시글</a>
+    <a th:href="@{/user/myPage}" class="link mr0p2r">마이페이지</a>
+  </div>
+  <section class="findSection">
+    <form name="form" th:action th:object="${userChangePwForm}" th:method="post" onsubmit="return checkForm()">
+      <h4 class="title">비밀번호 변경</h4>
+      <div>
+        <label for="password">현재 비밀번호</label>
+        <input type="password" id="password" th:field="*{password}" placeholder="현재 비밀번호" autocomplete="off" required
+               th:classappend="${#fields.hasErrors('password')} ? 'fieldError'" class="form-control">
+        <p class="text-error" id="passwordErr" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+      </div>
+      <div>
+        <label for="newPassword">새 비밀번호</label>
+        <input type="password" id="newPassword" th:field="*{newPassword}" placeholder="새 비밀번호" autocomplete="off" required
+               onchange="newPasswordCheck()" th:classappend="${#fields.hasErrors('newPassword')} ? 'fieldError'" class="form-control">
+        <p class="text-error" id="newPasswordErr" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}"></p>
+        <p id="checkNewPasswordResult" class="text-error"></p>
+      </div>
+      <div>
+        <label for="newPasswordConfirm">새 비밀번호 확인</label>
+        <input type="password" id="newPasswordConfirm" th:field="*{newPasswordConfirm}" placeholder="새 비밀번호 확인" autocomplete="off"
+               onchange="newPasswordConfirmCheck()" th:classappend="${#fields.hasErrors('newPasswordConfirm')} ? 'fieldError'" required class="form-control">
+        <p class="text-error" id="newPasswordConfirmErr" th:if="${#fields.hasErrors('newPasswordConfirm')}" th:errors="*{newPasswordConfirm}"></p>
+        <p id="checkNewPasswordConfirmResult" class="text-error"></p>
+      </div>
+      <div>
+        <p id="globalErr" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}"></p>
+        <input type="submit" value="비밀번호 변경" class="btn btn-dark btn-full">
+        <input type="button" onclick="javascript:history.back();" value="취소" class="btn btn-outline-dark btn-full">
+      </div>
+    </form>
+  </section>
+  <script th:inline="javascript">
+    var formatPassword = "[(#{format.password})]";
+    var equalNewPasswordConfirm = "[(#{equal.userChangePwForm.newPasswordConfirm})]";
+  </script>
+  <script th:src="@{/js/user.js}"></script>
 </body>
 </html>
