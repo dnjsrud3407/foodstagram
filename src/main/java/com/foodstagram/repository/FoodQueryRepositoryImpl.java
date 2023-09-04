@@ -94,7 +94,7 @@ public class FoodQueryRepositoryImpl implements FoodQueryRepository {
         List<FoodDto> content = queryFactory
                 .select(new QFoodDto(
                         food.id, food.storeName, food.score, food.title, food.visitDate,
-                        Expressions.stringTemplate("LISTAGG({0}, ',') WITHIN GROUP(ORDER BY {1})", category.name, category.id),
+                        Expressions.stringTemplate("LISTAGG({0}, ' ') WITHIN GROUP(ORDER BY {1})", category.name, category.id),
                         new QFoodPictureDto(foodPicture.originalFileName, foodPicture.storedFileName)
                 ))
                 .from(food)
