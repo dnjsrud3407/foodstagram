@@ -18,6 +18,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -314,7 +315,7 @@ public class FoodController {
     }
 
     @GetMapping("/list")
-    public String list(FoodSearchDto foodSearchDto, @PageableDefault(page = 0, size = 10) Pageable pageable,
+    public String list(FoodSearchDto foodSearchDto, @RequestParam(required = false) String query, @PageableDefault(page = 0, size = 10) Pageable pageable,
                        @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         log.info("list");
         Long userId = principalDetails.getUser().getId();
@@ -322,6 +323,12 @@ public class FoodController {
 
         if(foodSearchDto == null) {
             foodSearchDto = new FoodSearchDto();
+        }
+
+        // 상단바에서 검색할 때 - 검색 조건 초기화 시킴
+        if(StringUtils.hasText(query)) {
+            foodSearchDto = new FoodSearchDto();
+            foodSearchDto.setSearchText(query);
         }
 
         // 날짜가 visitDateStart > visitDateEnd 일 경우
@@ -336,6 +343,7 @@ public class FoodController {
 
         List<ListsDto> lists = listService.findLists(userId);
 
+        model.addAttribute("query", query);
         model.addAttribute("totalCount", foodList.getTotalElements());
         model.addAttribute("lists", lists);
         model.addAttribute("foodSearchDto", foodSearchDto);
