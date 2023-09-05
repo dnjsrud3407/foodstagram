@@ -1,3 +1,71 @@
+/* 검색조건 */
+.conditionSection {
+  width: 90%;
+  margin: 1% auto;
+}
+
+.categoryDiv {
+  margin: auto;
+}
+
+.category-check {
+  display: none;
+}
+
+.btn-category {
+  border-radius: 2rem !important;
+  min-width: 90px;
+}
+
+.btn-calendar {
+  vertical-align: baseline !important;
+  width: 55px;
+}
+
+.condition-title {
+  margin-right: 2rem;
+}
+
+.select-list {
+  width: 60% !important;
+  display: inline !important;
+}
+
+.order-list {
+  display: inline;
+}
+
+.order-label {
+  vertical-align: middle;
+}
+
+.order-input {
+  vertical-align: middle;
+  margin-right: 0.2rem;
+}
+
+/* food list */
+.listSection {
+  padding: 1% 9%;
+  background-color: #F8F2EE;
+}
+
+.preview-list {
+  width: 210px;
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+  text-align: center;
+  display: inline-block;
+  margin: 4px;
+  cursor: pointer;
+  background-color: white;
+}
+
+.storeName {
+  margin: 10px;
+  font-weight: 600 !important;
+}
+
 /* 별점 */
 .score {
   position: relative;
@@ -13,7 +81,7 @@
   opacity: 0;
 }
 
-.score span {
+.score .countStar {
   width: 0;
   position: absolute;
   left: 0;
@@ -22,18 +90,163 @@
   pointer-events: none;
 }
 
+.food-title {
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.food-category {
+  margin: 2px 0 0 8px;
+  text-align: left;
+  font-size: 12px;
+  color: grey;
+}
+
+.food-visitDate {
+  text-align: right;
+  margin: 2px 8px 10px;
+  font-size: 12px;
+}
+
+/* 페이징 */
+.pagingSection {
+  padding: 1% 0 2% 0;
+  background-color: #F8F2EE;
+}
+
+
+/* food detail */
+.foodSection {
+  text-align: -webkit-center;
+  padding: 1% 0;
+  background-color: #F8F2EE;
+}
+
+.foodSection form {
+  width: 750px;
+}
+
+.foodDiv {
+  width: 100%;
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+  background-color: white;
+  padding: 15px;
+}
+
+.btn-food-detail {
+  width: 70px;
+  margin-bottom: 1rem;
+}
+
+.food-storeName {
+  margin: 0.2rem;
+  font-weight: bold;
+}
+
+.food-picture {
+  width: 170px;
+  margin: 0 2px;
+}
+
+.contentDiv {
+  width: 90%;
+  margin: auto;
+  margin-top: 2rem;
+}
+
+.contentDiv hr {
+  margin-top: 3rem !important;
+  margin-bottom: 3rem !important;
+}
+
+.food-content {
+  width: 100%;
+  text-align: left;
+}
+
+.food-list {
+  font-size: 12px;
+  text-align: left;
+}
+
+.food-detail-category {
+  text-align: left;
+  font-size: 12px;
+  color: grey;
+}
+
+.food-detail-visitDate {
+  text-align: right;
+  font-size: 12px;
+  color: grey;
+}
+
+
+/* food create */
+foodSection input:-internal-autofill-selected {
+  background-color: none !important;
+}
+
+.input-create {
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-radius: 0 !important;
+}
+
+.input-category {
+  vertical-align: middle;
+}
+
+.food-create-content {
+  width: 100%;
+  resize: none;
+  height: 300px;
+}
+
+.food-address-input {
+  width: 70% !important;
+  margin-right: 0.5rem;
+  display: inline !important;
+  cursor: pointer;
+}
+
+.btn-food-create {
+  width: 90px;
+  margin-bottom: 1rem;
+}
+
 /* 파일 이미지 */
-.thumbDiv {
+.previewDiv-thumbnail {
+  display: inline-block;
+  float: left;
   text-align: center;
+  margin-right: 5px;
+  width: 195px;
+}
+
+.previewDiv-pictures {
+  display: inline-block;
+  float: left;
+  text-align: center;
+  max-width: 370px;
 }
 
 .preview {
-  width: 210px;
+  width: 175px;
   border: 1px solid #D9D9D9;
   border-radius: 10px;
   text-align: center;
   display: inline-block;
   margin: 4px;
+  cursor: pointer;
+  background-color: white;
+}
+
+.preview-thumbnail {
+  width: 165px;
+  margin: 5px 0;
 }
 
 /* 파일 버튼 */
@@ -61,23 +274,22 @@
   .file_fake {
     padding: 0 15px;
     width: 100%;
-    height: 50px;
+    height: 45px;
     border: 1px solid #ddd;
   }
 
   .button {
+    color: #fff;
+    background-color: #6c757d;
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 10px;
+    right: 6px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: auto 0;
-    padding: 0 15px;
-    height: 30px;
-    font-size: 13px;
-    color: #fff;
-    background-color: #0d6efd;
+    padding: .375rem .75rem;
+    height: 2.5rem;
   }
 }

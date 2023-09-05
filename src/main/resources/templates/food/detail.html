@@ -1,81 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <link th:href="@{/css/common.css}" rel="stylesheet" />
-    <link th:href="@{/css/food.css}" rel="stylesheet" />
-</head>
+<!-- Header -->
+<div th:replace="~{fragment/header :: header-food}"></div>
 <style>
     .map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
     .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
-    .map_wrap {position:relative;width:100%;}
-    .bg_white {background:#fff;}
+    .map_wrap {width: 500px;text-align: left;}
 </style>
 <body>
-    <div>
-        <input type="button" value="목록으로" th:onclick="|location.href='@{/food/list}'|">
-        <input type="button" value="수정" th:onclick="|location.href='@{/food/modify/{foodId} (foodId=${food.id})}'|">
-        <input type="button" value="삭제" th:onclick="|location.href='@{/food/delete/{foodId} (foodId=${food.id})}'|">
+    <div class="left div-logo-sm">
+        <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
     </div>
-    <form name="form" th:action th:object="${food}" th:method="post" enctype="multipart/form-data">
-        <div>
-            <label for="storeName">가게이름</label>
-            <span id="storeName" th:text="*{storeName}"></span>
-        </div>
-        <div>
-            <span>카테고리</span>
-            <span th:each="category : ${food.categoryDtos}">
-                <span th:text="${category.name}"></span>
-            </span>
-        </div>
-        <div>
-            <label for="visitDate">방문날짜</label>
-            <span id="visitDate" th:text="${#temporals.format(food.visitDate, 'yyyy-MM-dd')}"></span>
-        </div>
-        <div>
-            <label for="score">별점</label>
-            <div class="rating_box">
-                <span class="score">
-                  ★★★★★
-                  <span th:style="|width: ${food.score * 20}%|">★★★★★</span>
-                  <input type="range" id="score" name="score" th:field="*{score}" readonly>
-                </span>
+    <div class="right w97p">
+        <a th:href="@{/user/myPage}" class="link mr0p2r">마이페이지</a>
+    </div>
+    <div class="input-group searchBar">
+        <form th:action="@{/food/list}" th:method="get">
+            <input type="search" name="query" class="form-control searchBar-input" placeholder="맛집 이름, 주소 검색">
+            <div class="input-group-append">
+                <button class="btn btn-outline-dark searchBar-btn" type="submit">검색</button>
             </div>
-            <span id="scoreDisplay" th:text="${food.score}"></span>
-        </div>
-        <div>
-            <label for="list">리스트</label>
-            <span id="list" th:text="${food.listsDto.name}"></span>
-        </div>
-        <div>
-            <label for="title">게시글 제목</label>
-            <span id="title" th:text="*{title}"></span>
-        </div>
-        <div>
-            <textarea th:text="*{content}" readonly></textarea>
-        </div>
-        <div>
-            <label for="address">주소</label>
-            <div class="map_wrap" id="map_wrap">
-                <div id="map" style="width:500px;height:400px;"></div>
+        </form>
+    </div>
+    <section class="foodSection">
+        <form name="form" th:action th:object="${food}" th:method="post" enctype="multipart/form-data">
+            <div class="inlineLeft">
+                <a th:href="@{/food/list}" class="link">< 목록으로</a>
             </div>
-            <span id="address" th:text="*{address}"></span>
-        </div>
-        <div>
-            <!-- Thumbnail 이미지 -->
-            <div style="display: inline-block; float: left; width: 450px;">
-                <div class="thumbDiv">
-                    <div class="preview" th:each="foodPicture : ${food.foodPictureDtos}">
-                        <img id="preview-thumbnail" class="w200" th:src="|/picture/${loginId}/${foodPicture.storedFileName}|">
-                    </div>
-                </div>
+            <div class="inlineRight">
+                <input type="button" value="수정" th:onclick="|location.href='@{/food/modify/{foodId} (foodId=${food.id})}'|" class="btn btn-dark btn-food-detail">
+                <input type="button" value="삭제" th:onclick="|location.href='@{/food/delete/{foodId} (foodId=${food.id})}'|" class="btn btn-dark btn-food-detail">
             </div>
             <div style="clear: both;"></div>
-            <br><br>
-        </div>
-    </form>
+            <div class="foodDiv">
+                <div class="center">
+                    <span style="color: #ffc107">★</span>
+                    <span th:text="*{score}">점수</span>
+                    <h4 th:text="*{storeName}" class="inline food-storeName">가게이름</h4>
+                </div>
+                <!-- Thumbnail 이미지 -->
+                <div class="center mt1r">
+                    <div th:each="foodPicture : ${food.foodPictureDtos}" th:if="${foodPictureStat.index == 0}">
+                        <img class="w300" th:src="|/picture/${loginId}/${foodPicture.storedFileName}|">
+                    </div>
+                </div>
+                <div class="center mt1r">
+                    <div class="inline" th:each="foodPicture : ${food.foodPictureDtos}" th:if="${foodPictureStat.index > 0}">
+                        <img class="food-picture" th:src="|/picture/${loginId}/${foodPicture.storedFileName}|">
+                    </div>
+                </div>
+                <div class="contentDiv">
+                    <div class="food-list">
+                        <span th:text="${food.listsDto.name}"></span>
+                    </div>
+                    <div class="food-detail-category">
+                        <span th:each="category : ${food.categoryDtos}" th:text="${category.name}" class="mr0p2r"></span>
+                    </div>
+                    <div class="fw-600">
+                        <span th:text="*{title}"></span>
+                    </div>
+                    <div class="food-detail-visitDate">
+                        <span th:text="${#temporals.format(food.visitDate, 'yyyy-MM-dd')}"></span>
+                    </div>
+                    <div th:text="*{content}" class="food-content"></div>
+                    <hr>
+                    <div>
+                        <div class="map_wrap" id="map_wrap">
+                            <div id="map" style="height:400px;"></div>
+                            <span id="address" th:text="*{address}"></span>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+            </div>
+        </form>
+    </section>
     <script type="text/javascript" th:src="|//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoAPI}&libraries=services|"></script>
     <script th:inline="javascript">
         // API 주소 설정이 되어 있는지 확인
