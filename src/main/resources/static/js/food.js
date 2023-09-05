@@ -154,10 +154,17 @@ function foodPicturesDelete() {
     document.getElementById("preview-picture4").src = "https://dummyimage.com/200x250/fff/000&text=image";
 
     document.getElementById("picture-fake").value = "*.jpg/png/gif Only";
+    document.getElementById("foodPictures").value = "";
 
     var oTag = document.getElementById('oldFoodFileNames');
+    var foodPicturesTag = document.getElementById('foodPictures');
+
     if(oTag != null) {
         oTag.value = '';
+    }
+
+    if(foodPicturesTag != null) {
+        foodPicturesTag.value = '';
     }
 }
 
