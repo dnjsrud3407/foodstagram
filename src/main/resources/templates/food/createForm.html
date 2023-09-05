@@ -62,7 +62,7 @@
                         <p class="text-error" th:each="error, stat : ${#fields.errors('score')}" th:text="${error}" th:if="${stat.last}"></p>
                     </div>
                 </div>
-                <div class="row baseline">
+                <div class="row baseline mt0p5r">
                     <div class="col-2">리스트</div>
                     <div class="col-3 left">
                         <select id="listId" th:field="*{listId}" class="form-control form-control-sm">
@@ -72,7 +72,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="row baseline">
+                <div class="row baseline mt0p5r">
                     <div class="col-2">게시글 제목</div>
                     <div class="col-9">
                         <input type="text" id="title" th:field="*{title}" placeholder="게시글 제목" required

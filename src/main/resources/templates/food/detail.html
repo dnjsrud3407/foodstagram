@@ -62,7 +62,9 @@
                     <div class="food-detail-visitDate">
                         <span th:text="${#temporals.format(food.visitDate, 'yyyy-MM-dd')}"></span>
                     </div>
-                    <div th:text="*{content}" class="food-content"></div>
+                    <div class="food-content">
+                        <pre th:text="*{content}"></pre>
+                    </div>
                     <hr>
                     <div>
                         <div class="map_wrap" id="map_wrap">
