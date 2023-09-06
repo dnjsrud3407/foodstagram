@@ -1,66 +1,74 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <link th:href="@{/css/common.css}" rel="stylesheet" />
-    <link th:href="@{/css/list.css}" rel="stylesheet" />
-</head>
-<style>
-</style>
+<!-- Header -->
+<div th:replace="~{fragment/header :: header-list}"></div>
 <body>
-    등록된 리스트
-    <div class="listDiv">
-        <div>
-            <p th:text="|${totalCount}건|" class="fw-600 inlineLeft"></p>
-            <p id="globalErr" class="text-error inlineLeft"></p>
-            <p style="clear: both;"></p>
-        </div>
-        <div class="listDetail">
-            <div style="margin: 0.2rem 1rem;">
-                <p id="createInput" class="inlineLeft">
-                    <span style="cursor: pointer;" onclick="createListForm()">+ 새 리스트 만들기</span>
-                </p>
-                <p id="createBtn" class="inlineRight"></p>
-                <p style="clear: both;"></p>
-            </div>
-        </div>
-        <div class="listDetail" th:each="list : ${lists}">
-            <div style="margin: 0.2rem 1rem;">
-                <p class="modifyInput inlineLeft">
-                    <span th:text="${list.name}" class="fw-600">리스트 이름</span>
-                    <span th:text="${list.totalCnt}">리스트에 속한 게시글 수</span>
-                </p>
-                <p class="modifyBtn inlineRight">
-                    <span th:if="${list.totalCnt > 0}" th:onclick="|location.href='@{/list/{listId} (listId=${list.id})}'|" class="link">상세보기</span>
-                    <span th:if="${list.id != 1}" th:data-id="${list.id}" th:data-name="${list.name}" th:data-totalCnt="${list.totalCnt}"
-                          th:onclick="modifyListForm(this.getAttribute('data-id'), this.getAttribute('data-name'), this.getAttribute('data-totalCnt'), this)" class="link">수정</span>
-                    <span th:if="${list.id != 1 and list.totalCnt == 0}" th:onclick="|deleteList('${list.id}')|" class="link">삭제</span>
-                </p>
-                <p style="clear: both;"></p>
-            </div>
-        </div>
-        <div style="text-align: center;" th:with="size = ${paging.size}">
-            <input type="hidden" name="size" th:value="${size}">
-            <input type="hidden" name="page" id="page">
-            <span class="mr1r" th:with="num = ${paging.startNum - 1}">
-                <a th:onclick="|location.href='@{/list?page={page}&size={size} (page=${num}, size=${size})}'|"
-                   th:class="${paging.first} ? 'disabled link' : 'link'" >&lt;</a>
-            </span>
-            <span th:each="num : ${#numbers.sequence(paging.startNum, paging.endNum)}" class="mr1r">
-                <span th:if="${num == paging.currNum}" th:text="${num + 1}" class="fw-bold cursor-default"></span>
-                <span th:if="${num != paging.currNum}">
-                    <a th:onclick="|location.href='@{/list?page={page}&size={size} (page=${num}, size=${size})}'|"
-                       th:text="${num + 1}" class="link">1</a>
-                </span>
-            </span>
-            <span th:with="num = ${paging.endNum + 1}">
-                <a th:onclick="|location.href='@{/list?page={page}&size={size} (page=${num}, size=${size})}'|"
-                   th:class="${paging.last || paging.totalNum <= num} ? 'disabled link' : 'link'">&gt;</a>
-            </span>
+    <div class="left div-logo-sm">
+        <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
+    </div>
+    <div class="right navDiv">
+        <a th:href="@{/food/list}" class="link mr0p2r">게시글</a>
+        <a th:href="@{/user/myPage}" class="link mr0p2r">마이페이지</a>
+    </div>
+    <div class="bg-white">
+        <div class="input-group searchBar">
+            <form th:action="@{/food/list}" th:method="get">
+                <input type="search" name="query" class="form-control searchBar-input" placeholder="맛집 이름, 주소 검색">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-dark searchBar-btn" type="submit">검색</button>
+                </div>
+            </form>
         </div>
     </div>
+    <section class="listSection">
+        <div class="listDiv">
+            <div>
+                <p th:text="|등록된 리스트 ${totalCount-1}건|" class="fw-600 inlineLeft"></p>
+                <p id="globalErr" class="text-error inlineLeft"></p>
+                <div style="clear: both;"></div>
+            </div>
+            <div class="listDetail pointColor">
+                <div id="createInput" class="inlineLeft">
+                    <img th:src="@{/image/plus.png}" onclick="createListForm()" style="cursor: pointer;">
+                    <span onclick="createListForm()" style="cursor: pointer;">새 리스트 만들기</span>
+                </div>
+                <div id="createBtn" class="inlineRight"></div>
+                <div style="clear: both;"></div>
+            </div>
+            <div class="listDetail" th:each="list : ${lists}">
+                <div class="modifyInput inlineLeft">
+                    <span th:text="${list.name}" class="fw-600">리스트 이름</span>
+                    <span th:text="${list.totalCnt}">리스트에 속한 게시글 수</span>
+                </div>
+                <div class="modifyBtn inlineRight">
+                    <span th:if="${list.totalCnt > 0}" th:onclick="|location.href='@{/list/{listId} (listId=${list.id})}'|" class="link">상세보기</span>
+                    <span th:if="${list.id != 1}" th:data-id="${list.id}" th:data-name="${list.name}" th:data-totalCnt="${list.totalCnt}"
+                          th:onclick="modifyListForm(this.getAttribute('data-id'), this.getAttribute('data-name'), this.getAttribute('data-totalCnt'), this)" class="link ml0p5r">수정</span>
+                    <span th:if="${list.id != 1 and list.totalCnt == 0}" th:onclick="|deleteList('${list.id}')|" class="link ml0p5r">삭제</span>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+            <div th:with="size = ${paging.size}" class="pagingDiv">
+                <input type="hidden" name="size" th:value="${size}">
+                <input type="hidden" name="page" id="page">
+                <span class="mr1r" th:with="num = ${paging.startNum - 1}">
+                    <a th:onclick="|location.href='@{/list?page={page}&size={size} (page=${num}, size=${size})}'|"
+                       th:class="${paging.first} ? 'disabled link' : 'link'" >&lt;</a>
+                </span>
+                <span th:each="num : ${#numbers.sequence(paging.startNum, paging.endNum)}" class="mr1r">
+                    <span th:if="${num == paging.currNum}" th:text="${num + 1}" class="fw-bold cursor-default"></span>
+                    <span th:if="${num != paging.currNum}">
+                        <a th:onclick="|location.href='@{/list?page={page}&size={size} (page=${num}, size=${size})}'|"
+                           th:text="${num + 1}" class="link">1</a>
+                    </span>
+                </span>
+                <span th:with="num = ${paging.endNum + 1}">
+                    <a th:onclick="|location.href='@{/list?page={page}&size={size} (page=${num}, size=${size})}'|"
+                       th:class="${paging.last || paging.totalNum <= num} ? 'disabled link' : 'link'">&gt;</a>
+                </span>
+            </div>
+        </div>
+    </section>
     <script th:src="@{/js/list.js}"></script>
 </body>
 </html>

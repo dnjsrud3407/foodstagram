@@ -47,6 +47,10 @@ input[type='date'] {
   margin: 3% !important;
 }
 
+.m1r {
+  margin: 1rem;
+}
+
 .mr0p2r {
   margin-right: 0.2rem;
 }
@@ -63,12 +67,24 @@ input[type='date'] {
   margin-right: 1rem;
 }
 
+.mr1p5r {
+  margin-right: 1.5rem;
+}
+
 .mb1p {
   margin-bottom: 1%;
 }
 
 .ml0p5r {
   margin-left: 0.5rem;
+}
+
+.ml0p8r {
+  margin-left: 0.8rem;
+}
+
+.ml1r {
+  margin-left: 1rem;
 }
 
 .inlineLeft {
@@ -94,6 +110,10 @@ input[type='date'] {
   width: 70px;
 }
 
+.w120 {
+  width: 120px;
+}
+
 .w150 {
   width: 150px;
 }
@@ -114,12 +134,13 @@ input[type='date'] {
   width: 93%;
 }
 
-.w97p {
-  width: 97%;
-}
-
 .w100p {
   width: 100%;
+}
+
+/* height */
+.h180 {
+  height: 180px;
 }
 
 /* font 속성 */
@@ -142,6 +163,10 @@ pre {
     font-style: normal;
 }
 
+.fs-14 {
+  font-size: 14px;
+}
+
 .fw-600 {
   font-weight: 600;
 }
@@ -161,7 +186,7 @@ pre {
 
 .text-error {
   color: #bd2130;
-  font-size: 0.8rem;
+  font-size: 13px;
   margin: 0.3rem 0 0.6rem 0.3rem
 }
 
@@ -231,6 +256,13 @@ pre {
   width: 300px;
 }
 
+/* 네비게이션 */
+.navDiv {
+  padding-right: 3%;
+  background-color: white;
+  font-size: 14px;
+}
+
 /* 검색 bar */
 .searchBar {
   margin: auto !important;
@@ -258,4 +290,9 @@ pre {
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 1rem !important;
   width: 58px !important;
+}
+
+/* background-color */
+.bg-white {
+  background-color: white;
 }
