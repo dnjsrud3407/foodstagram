@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+  <!-- index navBar -->
+  <div th:fragment="nav-index" class="right navDiv">
+    <a sec:authorize="isAnonymous()" th:href="@{/account/loginForm}" class="link mr1r">로그인</a>
+    <a sec:authorize="isAnonymous()" th:href="@{/account/join}" class="link">회원가입</a>
+    <a sec:authorize="isAuthenticated()" th:href="@{/food/list}" class="link mr1r">게시글</a>
+    <a sec:authorize="isAuthenticated()" th:href="@{/user/myPage}" class="link mr1r">마이페이지</a>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/category/list}" class="link">[관리자 페이지] 카테고리</a>
+  </div>
+  <!-- food navBar -->
+  <div th:fragment="nav-food" class="right navDiv">
+    <a th:href="@{/list}" class="link mr1r">리스트</a>
+    <a th:href="@{/user/myPage}" class="link mr1r">마이페이지</a>
+  </div>
+  <!-- list navBar -->
+  <div th:fragment="nav-list" class="right navDiv">
+    <a th:href="@{/food/list}" class="link mr1r">게시글</a>
+    <a th:href="@{/user/myPage}" class="link mr1r">마이페이지</a>
+  </div>
+  <!-- myPage navBar -->
+  <div th:fragment="nav-myPage" class="right navDiv pb1p">
+    <a th:href="@{/food/list}" class="link mr1r">게시글</a>
+    <a th:href="@{/list}" class="link mr1r">리스트</a>
+  </div>
+</body>
+</html>

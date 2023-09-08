@@ -2,14 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <!-- Header -->
 <div th:replace="~{fragment/header :: header-account}"></div>
-<body>
+<body class="bg">
   <div class="center div-logo">
     <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
   </div>
-  <div class="right w97p">
-    <a th:href="@{/food/list}" class="link mr0p2r">게시글</a>
-    <a th:href="@{/user/myPage}" class="link mr0p2r">마이페이지</a>
-  </div>
+  <!-- nav bar -->
+  <div th:replace="~{fragment/nav :: nav-myPage}"></div>
   <section class="findSection">
     <form th:action th:method="post">
       <h4 class="title">회원탈퇴</h4>

@@ -27,6 +27,10 @@ input[type='date'] {
   margin-top: 0.5rem;
 }
 
+.mt1r {
+  margin-top: 1rem;
+}
+
 .mt2p {
   margin-top: 2%;
 }
@@ -75,6 +79,10 @@ input[type='date'] {
   margin-bottom: 1%;
 }
 
+.mb0p5r {
+  margin-bottom: 0.5rem !important;
+}
+
 .ml0p5r {
   margin-left: 0.5rem;
 }
@@ -85,6 +93,10 @@ input[type='date'] {
 
 .ml1r {
   margin-left: 1rem;
+}
+
+.pb1p {
+  padding-bottom: 1%;
 }
 
 .inlineLeft {
@@ -295,4 +307,18 @@ pre {
 /* background-color */
 .bg-white {
   background-color: white;
+}
+
+.bg {
+  background-color: #F8F2EE !important;
+}
+
+/* button color */
+.btn-outline-dark {
+  background-color: white !important;
+}
+
+.btn-outline-dark:hover{
+  background-color: #343a40 !important;
+  color: white;
 }

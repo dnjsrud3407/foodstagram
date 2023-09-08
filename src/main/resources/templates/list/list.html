@@ -6,10 +6,8 @@
     <div class="left div-logo-sm">
         <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
     </div>
-    <div class="right navDiv">
-        <a th:href="@{/food/list}" class="link mr0p2r">게시글</a>
-        <a th:href="@{/user/myPage}" class="link mr0p2r">마이페이지</a>
-    </div>
+    <!-- nav bar -->
+    <div th:replace="~{fragment/nav :: nav-list}"></div>
     <!-- 검색 bar -->
     <div th:replace="~{fragment/searchBar :: searchBar-form}"></div>
     <section class="listSection">
