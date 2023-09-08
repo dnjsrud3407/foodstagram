@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
+    <!-- no value searchBar -->
     <div th:fragment="searchBar-form" class="bg-white">
         <div class="input-group searchBar">
             <form th:action="@{/food/list}" th:method="get">
                 <input type="search" name="query" class="form-control searchBar-input" placeholder="맛집 이름, 주소 검색">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-dark searchBar-btn" type="submit">검색</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- value searchBar: food list 에서 사용 -->
+    <div th:fragment="searchBar-formValue(searchText)" class="bg-white">
+        <div class="input-group searchBar">
+            <form th:action="@{/food/list}" th:method="get">
+                <input type="search" name="query" th:value="${searchText}" class="form-control searchBar-input" placeholder="맛집 이름, 주소 검색">
                 <div class="input-group-append">
                     <button class="btn btn-outline-dark searchBar-btn" type="submit">검색</button>
                 </div>

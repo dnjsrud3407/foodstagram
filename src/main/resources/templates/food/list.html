@@ -8,17 +8,12 @@
     <div class="left div-logo-sm">
         <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
     </div>
-    <div class="right w97p">
+    <div class="right navDiv">
+        <a th:href="@{/list}" class="link mr0p2r">리스트</a>
         <a th:href="@{/user/myPage}" class="link mr0p2r">마이페이지</a>
     </div>
-    <div class="input-group searchBar">
-        <form th:action="@{/food/list}" th:method="get">
-            <input type="search" name="query" th:value="${foodSearchDto.searchText}" class="form-control searchBar-input" placeholder="맛집 이름, 주소 검색">
-            <div class="input-group-append">
-                <button class="btn btn-outline-dark searchBar-btn" type="submit">검색</button>
-            </div>
-        </form>
-    </div>
+    <!-- 검색 bar -->
+    <div th:replace="~{fragment/searchBar :: searchBar-formValue(searchText=${foodSearchDto.searchText})}"></div>
     <div style="clear: both;"></div>
     <form name="form" th:action th:method="get">
         <section class="conditionSection">

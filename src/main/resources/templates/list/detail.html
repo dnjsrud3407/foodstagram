@@ -10,16 +10,8 @@
         <a th:href="@{/food/list}" class="link mr0p2r">게시글</a>
         <a th:href="@{/user/myPage}" class="link mr0p2r">마이페이지</a>
     </div>
-    <div class="bg-white">
-        <div class="input-group searchBar">
-            <form th:action="@{/food/list}" th:method="get">
-                <input type="search" name="query" class="form-control searchBar-input" placeholder="맛집 이름, 주소 검색">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-dark searchBar-btn" type="submit">검색</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <!-- 검색 bar -->
+    <div th:replace="~{fragment/searchBar :: searchBar-form}"></div>
     <div class="listSection">
         <div class="list-link">
             <a th:href="@{/list}" class="link">< 목록으로</a>
