@@ -1,38 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <link th:href="@{/css/common.css}" rel="stylesheet" />
-</head>
-<body>
-마이페이지
-<section>
-  <h4 th:text="${user.loginId}"></h4>
-  <p>
-    이메일
-    <span th:text="${user.email}"></span>
-  </p>
-  <p th:if="${#strings.isEmpty(user.oauth)}">
-    <a th:href="@{/user/changePw}" class="link">비밀번호 변경</a>
-  </p>
-  <p>
-    <a th:href="@{/logout}" class="link mr0p2r">로그아웃</a>
-    <a th:href="@{/user/delete}" class="link">회원 탈퇴</a>
-  </p>
-</section>
-<hr>
-<section>
-  <div>
-    등록한 맛집<br>
-    <h5><a th:href="@{/food/list}" class="link" th:text="|${countFoods}건|"></a></h5>
+<!-- Header -->
+<div th:replace="~{fragment/header :: header-account}"></div>
+<body class="bg">
+  <div class="left div-logo-sm">
+    <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
   </div>
-  <div>
-    등록한 리스트<br>
-    <h5><a th:href="@{/list}" class="link" th:text="|${countLists}건|"></a></h5>
-  </div>
-</section>
-<script th:src="@{/js/user.js}"></script>
+  <!-- 검색 bar -->
+  <div th:replace="~{fragment/searchBar :: searchBar-form}"></div>
+  <section class="myPageSection">
+    <div class="myPageDiv">
+      <h4 th:text="|${user.loginId}님|"></h4>
+      <div class="foodDiv">
+        등록한 맛집<br>
+        <h5><a th:href="@{/food/list}" class="link" th:text="|${countFoods}건|"></a></h5>
+      </div>
+      <div class="listDiv">
+        등록한 리스트<br>
+        <h5><a th:href="@{/list}" class="link" th:text="|${countLists}건|"></a></h5>
+      </div>
+      <div style="clear: both;"></div>
+      <hr>
+      <div class="infoDiv">
+        <p class="fw-600">내 정보</p>
+        <p>
+          이메일
+          <span th:text="${user.email}"></span>
+        </p>
+        <span th:if="${#strings.isEmpty(user.oauth)}" class="mb0p5r mr1r">
+          <a th:href="@{/user/changePw}" class="link mr0p2r">비밀번호 변경</a>
+        </span>
+        <span>
+          <a th:href="@{/logout}" class="link">로그아웃</a><br>
+        </span>
+        <p class="mt1r">
+          <a th:href="@{/user/delete}" class="link">회원 탈퇴</a>
+        </p>
+      </div>
+    </div>
+  </section>
+  <script th:src="@{/js/user.js}"></script>
 </body>
 </html>
