@@ -5,122 +5,126 @@
 <style>
 </style>
 <body th:object="${foodSearchDto}">
-    <div class="left div-logo-sm">
-        <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
-    </div>
-    <!-- nav bar -->
-    <div th:replace="~{fragment/nav :: nav-food}"></div>
-    <!-- 검색 bar -->
-    <div th:replace="~{fragment/searchBar :: searchBar-formValue(searchText=${foodSearchDto.searchText})}"></div>
-    <div style="clear: both;"></div>
-    <form name="form" th:action th:method="get">
-        <section class="conditionSection">
-            <input type="hidden" th:field="*{searchText}">
-            <div class="center">
-                <span th:each="category : ${categories}" class="categoryDiv">
-                    <input type="checkbox" th:field="*{categoryIds}" th:value="${category.id}" onclick="listSearch()" class="btn-check category-check">
-                    <label th:for="${#ids.prev('categoryIds')}" th:text="${category.name}" class="btn btn-category"
-                           th:classappend="${#lists.contains(foodSearchDto.categoryIds, category.id)} ? 'btn-dark' : 'btn-outline-dark'"></label>
-                </span>
-            </div>
-            <div class="row justify-content-md-center mt0p4r">
-                <div class="col-4">
-                    <span class="condition-title">방문일</span>
-                    <span style="margin-right: 20px;">
-                        <a id="visitDateAll" onclick="visitDateAll()">전체</a>
+    <div class="wrapper">
+        <div class="left div-logo-sm">
+            <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
+        </div>
+        <!-- nav bar -->
+        <div th:replace="~{fragment/nav :: nav-food}"></div>
+        <!-- 검색 bar -->
+        <div th:replace="~{fragment/searchBar :: searchBar-formValue(searchText=${foodSearchDto.searchText})}"></div>
+        <div style="clear: both;"></div>
+        <form name="form" th:action th:method="get">
+            <section class="conditionSection">
+                <input type="hidden" th:field="*{searchText}">
+                <div class="center">
+                    <span th:each="category : ${categories}" class="categoryDiv">
+                        <input type="checkbox" th:field="*{categoryIds}" th:value="${category.id}" onclick="listSearch()" class="btn-check category-check">
+                        <label th:for="${#ids.prev('categoryIds')}" th:text="${category.name}" class="btn btn-category"
+                               th:classappend="${#lists.contains(foodSearchDto.categoryIds, category.id)} ? 'btn-dark' : 'btn-outline-dark'"></label>
                     </span>
-                    <span>
-                        <a id="visitDateSpec" onclick="visitDateSpec()">상세 검색</a>
-                        <span id="visitDateSpan">
-                            <input type="date" th:field="*{visitDateStart}" max="2200-12-31" class="form-control"> ~
-                            <input type="date" th:field="*{visitDateEnd}" max="2200-12-31" class="form-control">
-                            <input type="button" id="visitDateBtn" value="적용" onclick="listSearch()" class="btn btn-dark btn-calendar">
+                </div>
+                <div class="row justify-content-md-center mt0p4r">
+                    <div class="col-4">
+                        <span class="condition-title">방문일</span>
+                        <span style="margin-right: 20px;">
+                            <a id="visitDateAll" onclick="visitDateAll()">전체</a>
+                        </span>
+                        <span>
+                            <a id="visitDateSpec" onclick="visitDateSpec()">상세 검색</a>
+                            <span id="visitDateSpan">
+                                <input type="date" th:field="*{visitDateStart}" max="2200-12-31" class="form-control"> ~
+                                <input type="date" th:field="*{visitDateEnd}" max="2200-12-31" class="form-control">
+                                <input type="button" id="visitDateBtn" value="적용" onclick="listSearch()" class="btn btn-dark btn-calendar">
+                            </span>
+                        </span>
+                    </div>
+                    <div class="col-3">
+                        <span class="condition-title">리스트</span>
+                        <select id="listId" th:field="*{listId}" onchange="listSearch()" class="form-control form-control-sm select-list">
+                            <option value="0">전체보기</option>
+                            <option th:each="list : ${lists}"
+                                    th:value="${list.id}"
+                                    th:text="${list.name}" />
+                        </select>
+                    </div>
+                    <div class="right">
+                        <span class="condition-title">정렬순서</span>
+                        <div class="order-list">
+                            <label th:each="order : ${T(com.foodstagram.service.FoodSearchOrder).values()}" class="mr1r order-label">
+                                <input type="radio" th:field="*{orderBy}" th:value="${order}" th:text="${order.label}" onclick="listSearch()" class="order-input">
+                            </label>
+                        </div>
+                        <div>
+                            <span class="link mr1r" onclick="reset()">↺ 옵션 초기화</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="listSection">
+                <div class="inlineLeft">
+                    총 게시글 <span th:text="|${totalCount}|" class="fw-600"></span>건
+                </div>
+                <div class="inlineRight">
+                    <input type="button" value="맛집 등록" th:onclick="|location.href='@{/food/create}'|" class="btn btn-dark">
+                </div>
+                <div style="clear: both;"></div>
+                <!-- foodList -->
+                <div class="center mb1p">
+                    <div th:each="food : ${foodList}" th:if="${foodStat.index < 5}"
+                         th:onclick="|location.href='@{/food/{foodId} (foodId=${food.id})}'|" class="preview-list">
+                        <h5 th:text="${food.storeName}" class="storeName">가게 이름</h5>
+                        <img class="w200" th:src="|/picture/${loginId}/${food.foodPictureDtos[0].storedFileName}|"><br>
+                        <p style="margin: 5px 0 0 8px; text-align: left;">
+                            <span style="color: #ffc107">★</span>
+                            <span th:text="${food.score}">점수</span>
+                            <span th:text="${food.title}" class="food-title">글 제목</span>
+                        </p>
+                        <p th:text="${food.categoryNameStr}" class="food-category">카테고리</p>
+                        <p th:text="${food.visitDate}" class="food-visitDate">방문날짜</p>
+                    </div>
+                </div>
+                <div class="center">
+                    <div th:each="food : ${foodList}" th:if="${foodStat.index >= 5}"
+                         th:onclick="|location.href='@{/food/{foodId} (foodId=${food.id})}'|" class="preview-list" >
+                        <h5 th:text="${food.storeName}" class="storeName">가게 이름</h5>
+                        <img class="w200" th:src="|/picture/${loginId}/${food.foodPictureDtos[0].storedFileName}|"><br>
+                        <p style="margin: 5px 0 0 8px; text-align: left;">
+                            <span style="color: #ffc107">★</span>
+                            <span th:text="${food.score}">점수</span>
+                            <span th:text="${food.title}" class="food-title">글 제목</span>
+                        </p>
+                        <p th:text="${food.categoryNameStr}" class="food-category">카테고리</p>
+                        <p th:text="${food.visitDate}" class="food-visitDate">방문날짜</p>
+                    </div>
+                </div>
+                <br>
+            </section>
+            <section class="pagingSection">
+                <div style="text-align: center;" th:with="size = ${paging.size}">
+                    <input type="hidden" name="size" th:value="${size}">
+                    <input type="hidden" name="page" id="page">
+                    <span class="mr1r" th:with="num = ${paging.startNum - 1}">
+                        <a th:onclick="|listSearch('${num}')|"
+                           th:class="${paging.first} ? 'disabled link' : 'link'" >&lt;</a>
+                    </span>
+                    <span th:each="num : ${#numbers.sequence(paging.startNum, paging.endNum)}" class="mr1r">
+                        <span th:if="${num == paging.currNum}" th:text="${num + 1}" class="fw-bold cursor-default"></span>
+                        <span th:if="${num != paging.currNum}">
+                            <a th:onclick="|listSearch('${num}')|"
+                               th:text="${num + 1}" class="link">1</a>
                         </span>
                     </span>
-                </div>
-                <div class="col-3">
-                    <span class="condition-title">리스트</span>
-                    <select id="listId" th:field="*{listId}" onchange="listSearch()" class="form-control form-control-sm select-list">
-                        <option value="0">전체보기</option>
-                        <option th:each="list : ${lists}"
-                                th:value="${list.id}"
-                                th:text="${list.name}" />
-                    </select>
-                </div>
-                <div class="right">
-                    <span class="condition-title">정렬순서</span>
-                    <div class="order-list">
-                        <label th:each="order : ${T(com.foodstagram.service.FoodSearchOrder).values()}" class="mr1r order-label">
-                            <input type="radio" th:field="*{orderBy}" th:value="${order}" th:text="${order.label}" onclick="listSearch()" class="order-input">
-                        </label>
-                    </div>
-                    <div>
-                        <span class="link mr1r" onclick="reset()">↺ 옵션 초기화</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="listSection">
-            <div class="inlineLeft">
-                총 게시글 <span th:text="|${totalCount}|" class="fw-600"></span>건
-            </div>
-            <div class="inlineRight">
-                <input type="button" value="맛집 등록" th:onclick="|location.href='@{/food/create}'|" class="btn btn-dark">
-            </div>
-            <div style="clear: both;"></div>
-            <!-- foodList -->
-            <div class="center mb1p">
-                <div th:each="food : ${foodList}" th:if="${foodStat.index < 5}"
-                     th:onclick="|location.href='@{/food/{foodId} (foodId=${food.id})}'|" class="preview-list">
-                    <h5 th:text="${food.storeName}" class="storeName">가게 이름</h5>
-                    <img class="w200" th:src="|/picture/${loginId}/${food.foodPictureDtos[0].storedFileName}|"><br>
-                    <p style="margin: 5px 0 0 8px; text-align: left;">
-                        <span style="color: #ffc107">★</span>
-                        <span th:text="${food.score}">점수</span>
-                        <span th:text="${food.title}" class="food-title">글 제목</span>
-                    </p>
-                    <p th:text="${food.categoryNameStr}" class="food-category">카테고리</p>
-                    <p th:text="${food.visitDate}" class="food-visitDate">방문날짜</p>
-                </div>
-            </div>
-            <div class="center">
-                <div th:each="food : ${foodList}" th:if="${foodStat.index >= 5}"
-                     th:onclick="|location.href='@{/food/{foodId} (foodId=${food.id})}'|" class="preview-list" >
-                    <h5 th:text="${food.storeName}" class="storeName">가게 이름</h5>
-                    <img class="w200" th:src="|/picture/${loginId}/${food.foodPictureDtos[0].storedFileName}|"><br>
-                    <p style="margin: 5px 0 0 8px; text-align: left;">
-                        <span style="color: #ffc107">★</span>
-                        <span th:text="${food.score}">점수</span>
-                        <span th:text="${food.title}" class="food-title">글 제목</span>
-                    </p>
-                    <p th:text="${food.categoryNameStr}" class="food-category">카테고리</p>
-                    <p th:text="${food.visitDate}" class="food-visitDate">방문날짜</p>
-                </div>
-            </div>
-            <br>
-        </section>
-        <section class="pagingSection">
-            <div style="text-align: center;" th:with="size = ${paging.size}">
-                <input type="hidden" name="size" th:value="${size}">
-                <input type="hidden" name="page" id="page">
-                <span class="mr1r" th:with="num = ${paging.startNum - 1}">
-                    <a th:onclick="|listSearch('${num}')|"
-                       th:class="${paging.first} ? 'disabled link' : 'link'" >&lt;</a>
-                </span>
-                <span th:each="num : ${#numbers.sequence(paging.startNum, paging.endNum)}" class="mr1r">
-                    <span th:if="${num == paging.currNum}" th:text="${num + 1}" class="fw-bold cursor-default"></span>
-                    <span th:if="${num != paging.currNum}">
+                    <span th:with="num = ${paging.endNum + 1}">
                         <a th:onclick="|listSearch('${num}')|"
-                           th:text="${num + 1}" class="link">1</a>
+                           th:class="${paging.last || paging.totalNum <= num} ? 'disabled link' : 'link'">&gt;</a>
                     </span>
-                </span>
-                <span th:with="num = ${paging.endNum + 1}">
-                    <a th:onclick="|listSearch('${num}')|"
-                       th:class="${paging.last || paging.totalNum <= num} ? 'disabled link' : 'link'">&gt;</a>
-                </span>
-            </div>
-        </section>
-    </form>
+                </div>
+            </section>
+        </form>
+    </div>
+    <!-- Footer -->
+    <div th:replace="~{fragment/footer :: footer-default}"></div>
     <script th:src="@{/js/food.js}"></script>
     <script>
         var visitDateStart = "[[${foodSearchDto.visitDateStart}]]";

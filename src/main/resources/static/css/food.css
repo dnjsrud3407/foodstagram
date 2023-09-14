@@ -110,7 +110,7 @@
 
 /* 페이징 */
 .pagingSection {
-  padding: 1% 0 2% 0;
+  padding: 1% 0 3% 0;
   background-color: #F8F2EE;
 }
 
@@ -118,7 +118,7 @@
 /* food detail */
 .foodSection {
   text-align: -webkit-center;
-  padding: 1% 0;
+  padding: 1% 0 3% 0;
   background-color: #F8F2EE;
 }
 

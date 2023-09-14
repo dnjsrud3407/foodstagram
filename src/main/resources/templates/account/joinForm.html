@@ -47,6 +47,8 @@
       </div>
     </form>
   </section>
+  <!-- Footer -->
+  <div th:replace="~{fragment/footer :: footer-fix}"></div>
   <script th:inline="javascript">
     var formatLoginId = "[(#{format.loginId})]";
     var formatPassword = "[(#{format.password})]";

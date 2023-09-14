@@ -30,6 +30,8 @@
       </div>
     </form>
   </section>
+  <!-- Footer -->
+  <div th:replace="~{fragment/footer :: footer-fix}"></div>
   <script th:inline="javascript">
       var requiredLoginId = "[(#{required.user.loginId})]";
       var requiredPassword = "[(#{required.user.password})]";

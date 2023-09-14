@@ -27,6 +27,8 @@
       </div>
     </form>
   </section>
+  <!-- Footer -->
+  <div th:replace="~{fragment/footer :: footer-fix}"></div>
   <script th:inline="javascript">
     var formatEmail = "[(#{format.email})]";
     var expiredEmail = "[(#{expired.emailCheckForm.authNum})]";

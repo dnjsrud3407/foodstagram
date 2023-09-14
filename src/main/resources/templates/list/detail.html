@@ -3,68 +3,72 @@
 <!-- Header -->
 <div th:replace="~{fragment/header :: header-list}"></div>
 <body>
-    <div class="left div-logo-sm">
-        <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
-    </div>
-    <!-- nav bar -->
-    <div th:replace="~{fragment/nav :: nav-list}"></div>
-    <!-- 검색 bar -->
-    <div th:replace="~{fragment/searchBar :: searchBar-form}"></div>
-    <div class="listSection">
-        <div class="list-link">
-            <a th:href="@{/list}" class="link">< 목록으로</a>
+    <div class="wrapper">
+        <div class="left div-logo-sm">
+            <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
         </div>
-        <div class="listDiv">
-            <form id="form" th:action="@{/list/deleteFood}" th:method="post">
-                <p id="globalErr" class="text-error inlineLeft"></p>
-                <div>
-                    <p th:text="|${listsDto.name} ${listsDto.totalCnt}건|" class="fw-600 inlineLeft fs-14"></p>
-                    <p class="inlineRight">
-                        <input type="submit" value="리스트에서 제거" class="btn btn-dark">
-                    </p>
-                </div>
-                <div style="clear: both;"></div>
-                <div style="margin: 0.2rem 1rem;">
-                    <div class="preview" th:each="food : ${foodList}">
-                        <img class="h180 inlineLeft" th:src="|/picture/${loginId}/${food.foodPictureDtos[0].storedFileName}|"
-                             th:onclick="|location.href='@{/food/{foodId} (foodId=${food.id})}'|" style="cursor: pointer;">
-                        <div class="inlineLeft m1r">
-                            <h5 th:text="${food.storeName}" th:onclick="|location.href='@{/food/{foodId} (foodId=${food.id})}'|"
-                                class="list-storeName">가게 이름</h5>
-                            <p style="margin: 5px 0 0 8px; text-align: left;">
-                                <span style="color: #ffc107">★</span>
-                                <span th:text="${food.score}">점수</span>
-                            </p>
-                            <p th:text="${food.categoryNameStr}" class="list-category">카테고리</p>
-                        </div>
-                        <div class="inlineRight" style="margin-top: 78px;">
-                           <input type="checkbox" th:name="deleteFoodIds" th:value="${food.id}">
+        <!-- nav bar -->
+        <div th:replace="~{fragment/nav :: nav-list}"></div>
+        <!-- 검색 bar -->
+        <div th:replace="~{fragment/searchBar :: searchBar-form}"></div>
+        <div class="listSection">
+            <div class="list-link">
+                <a th:href="@{/list}" class="link">< 목록으로</a>
+            </div>
+            <div class="listDiv">
+                <form id="form" th:action="@{/list/deleteFood}" th:method="post">
+                    <p id="globalErr" class="text-error inlineLeft"></p>
+                    <div>
+                        <p th:text="|${listsDto.name} ${listsDto.totalCnt}건|" class="fw-600 inlineLeft fs-14"></p>
+                        <p class="inlineRight">
+                            <input type="submit" value="리스트에서 제거" class="btn btn-dark">
+                        </p>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div style="margin: 0.2rem 1rem;">
+                        <div class="preview" th:each="food : ${foodList}">
+                            <img class="h180 inlineLeft" th:src="|/picture/${loginId}/${food.foodPictureDtos[0].storedFileName}|"
+                                 th:onclick="|location.href='@{/food/{foodId} (foodId=${food.id})}'|" style="cursor: pointer;">
+                            <div class="inlineLeft m1r">
+                                <h5 th:text="${food.storeName}" th:onclick="|location.href='@{/food/{foodId} (foodId=${food.id})}'|"
+                                    class="list-storeName">가게 이름</h5>
+                                <p style="margin: 5px 0 0 8px; text-align: left;">
+                                    <span style="color: #ffc107">★</span>
+                                    <span th:text="${food.score}">점수</span>
+                                </p>
+                                <p th:text="${food.categoryNameStr}" class="list-category">카테고리</p>
+                            </div>
+                            <div class="inlineRight" style="margin-top: 78px;">
+                               <input type="checkbox" th:name="deleteFoodIds" th:value="${food.id}">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div th:with="size = ${paging.size}, listId = ${listsDto.id}" class="pagingDiv">
-                    <input type="hidden" name="size" th:value="${size}">
-                    <input type="hidden" name="page" th:value="${paging.currNum}">
-                    <input type="hidden" name="listId" th:value="${listId}">
-                    <span class="mr1r" th:with="num = ${paging.startNum - 1}">
-                        <a th:onclick="|location.href='@{/list/{listId}?page={page}&size={size} (listId=${listId}, page=${num}, size=${size})}'|"
-                           th:class="${paging.first} ? 'disabled link' : 'link'" >&lt;</a>
-                    </span>
-                    <span th:each="num : ${#numbers.sequence(paging.startNum, paging.endNum)}" class="mr1r">
-                        <span th:if="${num == paging.currNum}" th:text="${num + 1}" class="fw-bold cursor-default"></span>
-                        <span th:if="${num != paging.currNum}">
+                    <div th:with="size = ${paging.size}, listId = ${listsDto.id}" class="pagingDiv">
+                        <input type="hidden" name="size" th:value="${size}">
+                        <input type="hidden" name="page" th:value="${paging.currNum}">
+                        <input type="hidden" name="listId" th:value="${listId}">
+                        <span class="mr1r" th:with="num = ${paging.startNum - 1}">
                             <a th:onclick="|location.href='@{/list/{listId}?page={page}&size={size} (listId=${listId}, page=${num}, size=${size})}'|"
-                               th:text="${num + 1}" class="link">1</a>
+                               th:class="${paging.first} ? 'disabled link' : 'link'" >&lt;</a>
                         </span>
-                    </span>
-                    <span th:with="num = ${paging.endNum + 1}">
-                        <a th:onclick="|location.href='@{/list/{listId}?page={page}&size={size} (listId=${listId}, page=${num}, size=${size})}'|"
-                           th:class="${paging.last || paging.totalNum <= num} ? 'disabled link' : 'link'">&gt;</a>
-                    </span>
-                </div>
-            </form>
+                        <span th:each="num : ${#numbers.sequence(paging.startNum, paging.endNum)}" class="mr1r">
+                            <span th:if="${num == paging.currNum}" th:text="${num + 1}" class="fw-bold cursor-default"></span>
+                            <span th:if="${num != paging.currNum}">
+                                <a th:onclick="|location.href='@{/list/{listId}?page={page}&size={size} (listId=${listId}, page=${num}, size=${size})}'|"
+                                   th:text="${num + 1}" class="link">1</a>
+                            </span>
+                        </span>
+                        <span th:with="num = ${paging.endNum + 1}">
+                            <a th:onclick="|location.href='@{/list/{listId}?page={page}&size={size} (listId=${listId}, page=${num}, size=${size})}'|"
+                               th:class="${paging.last || paging.totalNum <= num} ? 'disabled link' : 'link'">&gt;</a>
+                        </span>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+    <!-- Footer -->
+    <div th:replace="~{fragment/footer :: footer-default}"></div>
     <script th:src="@{/js/list.js}"></script>
 </body>
 </html>

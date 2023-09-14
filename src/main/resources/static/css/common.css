@@ -138,6 +138,10 @@ input[type='date'] {
   width: 300px;
 }
 
+.w85p {
+  width: 85%;
+}
+
 .w90p {
   width: 90%;
 }
@@ -273,6 +277,49 @@ pre {
   padding-right: 3%;
   background-color: white;
   font-size: 14px;
+}
+
+/* footer */
+.wrapper-sm {
+  height: auto;
+  min-height: calc(100vh - 80px);
+  padding-bottom: 80px;
+}
+
+.footer-sm {
+  background-color: white;
+  height: 80px;
+  position : relative;
+  transform : translateY(-100%);
+  padding-top: 20px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.wrapper {
+  height: auto;
+  min-height: calc(100vh);
+  padding-bottom: 110px;
+}
+
+.footer-default {
+  background-color: white;
+  height: 110px;
+  position : relative;
+  transform : translateY(-100%);
+  padding-top: 20px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.footer-fix {
+  height: 110px;
+  background-color: white;
+  padding-top: 20px;
+  text-align: center;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
 }
 
 /* 검색 bar */
