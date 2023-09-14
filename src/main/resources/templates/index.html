@@ -4,10 +4,26 @@
 <!-- Header -->
 <div th:replace="~{fragment/header :: header-index}"></div>
 <body>
-    <div class="center div-logo">
-        <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
+    <div class="wrapper-sm">
+        <div class="center div-logo">
+            <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
+        </div>
+        <!-- nav bar -->
+        <div th:replace="~{fragment/nav :: nav-index}"></div>
+        <div class="mainSection">
+            <div class="img-wrap">
+                <div>
+                    <img th:src="@{/image/main.jpg}" class="w85p">
+                </div>
+                <div class="imgText">
+                    <p>맛있는 음식과 함께한 순간을<br>
+                        FOODSTAGRAM에 기록해 보세요
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- nav bar -->
-    <div th:replace="~{fragment/nav :: nav-index}"></div>
+    <!-- Footer -->
+    <div th:replace="~{fragment/footer :: footer-sm}"></div>
 </body>
 </html>
