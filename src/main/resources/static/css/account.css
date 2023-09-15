@@ -89,3 +89,12 @@
 .infoDiv {
     padding: 4%;
 }
+
+/* error 페이지 */
+.errorSection {
+    width: 500px;
+    margin-inline: auto;
+    height: 75%;
+    display: grid;
+    place-items: center;
+}

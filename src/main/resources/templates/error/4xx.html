@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Header -->
+<div th:replace="~{fragment/header :: header-account}"></div>
+<body class="bg">
+<div class="center div-logo">
+  <img th:src="@{/image/logo.png}" th:onclick="|location.href='@{/}'|" class="img-logo">
+</div>
+<section class="errorSection">
+    <h2>요청하신 페이지를 불러올 수 없습니다</h2>
+</section>
+<!-- Footer -->
+<div th:replace="~{fragment/footer :: footer-fix}"></div>
+</body>
+</html>
