@@ -7,7 +7,7 @@ html, body {
 }
 
 input[type='date'] {
-  width: 110px !important;
+  width: 120px !important;
   display: inline !important;
   margin: 0 !important;
 }
