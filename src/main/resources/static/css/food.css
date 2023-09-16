@@ -59,11 +59,16 @@
   margin: 4px;
   cursor: pointer;
   background-color: white;
+  min-height: 383px;
 }
 
 .storeName {
   margin: 10px;
   font-weight: 600 !important;
+}
+
+.preview-img {
+  min-height: 266px;
 }
 
 /* 별점 */
