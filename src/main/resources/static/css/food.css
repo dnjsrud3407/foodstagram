@@ -69,6 +69,8 @@
 
 .preview-img {
   min-height: 266px;
+  writing-mode: vertical-lr;
+  margin: auto !important;
 }
 
 /* 별점 */
