@@ -147,7 +147,7 @@ public class FoodQueryRepositoryImpl implements FoodQueryRepository {
             return food.visitDate.goe(visitDateStart);
         } else if (visitDateStart == null && visitDateEnd != null) {
             return food.visitDate.loe(visitDateEnd);
-        } else if (visitDateStart == null && visitDateEnd != null) {
+        } else if (visitDateStart != null && visitDateEnd != null) {
             return food.visitDate.between(visitDateStart, visitDateEnd);
         }
 
