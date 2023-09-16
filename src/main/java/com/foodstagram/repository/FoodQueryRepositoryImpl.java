@@ -122,6 +122,7 @@ public class FoodQueryRepositoryImpl implements FoodQueryRepository {
                 .join(food.foodCategories, foodCategory).on(foodCategory.isDel.eq(false))
                 .leftJoin(food.list, lists).on(lists.isDel.eq(false))
                 .where(
+                        food.user.id.eq(userId),
                         containsStoreNameOrAddress(foodSearchDto.getSearchText()),
                         inCategoryId(foodSearchDto.getCategoryIds()),
                         betweenVisitDate(foodSearchDto.getVisitDateStart(), foodSearchDto.getVisitDateEnd()),
