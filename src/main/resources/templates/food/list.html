@@ -80,7 +80,7 @@
                         <p style="margin: 5px 0 0 8px; text-align: left;">
                             <span style="color: #ffc107">★</span>
                             <span th:text="${food.score}">점수</span>
-                            <span th:text="${food.title}" class="food-title">글 제목</span>
+                            <span th:text="${#strings.length(food.title) < 14} ? ${food.title} : |${#strings.substring(food.title, 0, 13)}...|" class="food-title">글 제목</span>
                         </p>
                         <p th:text="${food.categoryNameStr}" class="food-category">카테고리</p>
                         <p th:text="${food.visitDate}" class="food-visitDate">방문날짜</p>
@@ -96,7 +96,7 @@
                         <p style="margin: 5px 0 0 8px; text-align: left;">
                             <span style="color: #ffc107">★</span>
                             <span th:text="${food.score}">점수</span>
-                            <span th:text="${food.title}" class="food-title">글 제목</span>
+                            <span th:text="${#strings.length(food.title) < 14} ? ${food.title} : |${#strings.substring(food.title, 0, 13)}...|" class="food-title">글 제목</span>
                         </p>
                         <p th:text="${food.categoryNameStr}" class="food-category">카테고리</p>
                         <p th:text="${food.visitDate}" class="food-visitDate">방문날짜</p>
