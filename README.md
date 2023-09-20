@@ -30,7 +30,7 @@ SpringBoot로 개발하였고 Kakao OAuth2 로그인 기능, 로그인시 JWT �
 <img title="db_erd" src="https://user-images.githubusercontent.com/52884298/269186668-46981a0c-25bf-40ee-804c-acdeef65a8aa.png" width="600px">
 
 <br><br>
-<hr>
+<hr><br>
 
 ## 주요 기능
 
@@ -76,17 +76,13 @@ SpringBoot로 개발하였고 Kakao OAuth2 로그인 기능, 로그인시 JWT �
 
 - 게시글 검색 및 목록<br>
 
-<video autoplay muted controls data-keepplaying>
-    <source type="video/mp4" src="https://github-production-user-asset-6210df.s3.amazonaws.com/52884298/268456323-bffd7955-8aa0-4b69-96b5-dda67364f8f4.mp4" >
-</video>
+https://github.com/dnjsrud3407/foodstagram/assets/52884298/61e74790-c74b-4da2-9b42-36ca97202c7d
 
 <br><br>
 
 - 게시글 상세보기<br>
 
-<video autoplay muted controls data-keepplaying>
-    <source type="video/mp4" src="https://github-production-user-asset-6210df.s3.amazonaws.com/52884298/268456783-f058882c-fba6-489a-95da-2037eba41eda.mp4" >
-</video>
+https://github.com/dnjsrud3407/foodstagram/assets/52884298/07c34f3d-83d0-44df-9d97-610a9634db4e
 
 <br><br>
 
