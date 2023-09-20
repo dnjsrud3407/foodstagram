@@ -8,7 +8,7 @@
 <br><br>
 SpringBoot로 개발하였고 Kakao OAuth2 로그인 기능, 로그인시 JWT 발급하여 Redis에 저장, Oracle Cloud로 배포 등 여러 기능을 사용하여 구현하였습니다.
 
-
+<br>
 
 ## 개발 환경 및 사용된 기술
 개발 환경
@@ -24,11 +24,12 @@ SpringBoot로 개발하였고 Kakao OAuth2 로그인 기능, 로그인시 JWT �
 - Kakao map, OAuth2 API, Gmail smtp
 - Spring Security
 
+<br>
 
 ## Database ERD
-<!-- TODO: 사진 붙이기 -->
+<img title="db_erd" src="https://user-images.githubusercontent.com/52884298/269186668-46981a0c-25bf-40ee-804c-acdeef65a8aa.png" width="600px">
 
-<br>
+<br><br>
 <hr>
 
 ## 주요 기능
@@ -60,16 +61,34 @@ SpringBoot로 개발하였고 Kakao OAuth2 로그인 기능, 로그인시 JWT �
 5. 관리자 서비스<br>
    게시글 카테고리를 관리할 수 있습니다.
 
+<br>
 
 ## 시연 영상
+- 로그인 및 회원가입<br>
 <img title="join_login" src="https://user-images.githubusercontent.com/52884298/268448285-0b872e22-4538-4b54-8cc1-3bb94e698738.gif" width="700px">
+
+<br>
+
+- 카카오 로그인<br>
 <img title="kakaoLogin" src="https://user-images.githubusercontent.com/52884298/268448542-2f675b23-d2fe-48c7-a47c-4667f832376f.gif" width="700px">
-<video class="video" autoplay muted controls data-keepplaying>
+
+<br>
+
+- 게시글 검색 및 목록<br>
+
+<video autoplay muted controls data-keepplaying>
     <source type="video/mp4" src="https://github-production-user-asset-6210df.s3.amazonaws.com/52884298/268456323-bffd7955-8aa0-4b69-96b5-dda67364f8f4.mp4" >
 </video>
-<video class="video" autoplay muted controls data-keepplaying>
+
+<br><br>
+
+- 게시글 상세보기<br>
+
+<video autoplay muted controls data-keepplaying>
     <source type="video/mp4" src="https://github-production-user-asset-6210df.s3.amazonaws.com/52884298/268456783-f058882c-fba6-489a-95da-2037eba41eda.mp4" >
 </video>
-<img title="food_search" src="https://user-images.githubusercontent.com/62924471/132991673-c8b184aa-2b11-4281-8a09-419a1a69d239.gif" width="700px">
-<img title="food_detail" src="https://user-images.githubusercontent.com/62924471/132991423-4ee0b027-a839-4aca-8ccf-4338dd271995.gif" width="700px">
+
+<br><br>
+
+- 리스트 목록 및 등록하기
 <img title="list_detail_create" src="https://user-images.githubusercontent.com/52884298/268457514-409a7e11-4824-4ffb-8017-3da0012bd706.gif" width="700px">
