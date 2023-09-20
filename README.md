@@ -65,12 +65,12 @@ SpringBoot로 개발하였고 Kakao OAuth2 로그인 기능, 로그인시 JWT �
 
 ## 시연 영상
 - 로그인 및 회원가입<br>
-<img title="join_login" src="https://user-images.githubusercontent.com/52884298/268448285-0b872e22-4538-4b54-8cc1-3bb94e698738.gif" width="700px">
+<img title="join_login" src="https://user-images.githubusercontent.com/52884298/268448285-0b872e22-4538-4b54-8cc1-3bb94e698738.gif" width="1000px">
 
 <br>
 
 - 카카오 로그인<br>
-<img title="kakaoLogin" src="https://user-images.githubusercontent.com/52884298/268448542-2f675b23-d2fe-48c7-a47c-4667f832376f.gif" width="700px">
+<img title="kakaoLogin" src="https://user-images.githubusercontent.com/52884298/268448542-2f675b23-d2fe-48c7-a47c-4667f832376f.gif" width="1000px">
 
 <br>
 
@@ -87,4 +87,4 @@ https://github.com/dnjsrud3407/foodstagram/assets/52884298/07c34f3d-83d0-44df-9d
 <br><br>
 
 - 리스트 목록 및 등록하기
-<img title="list_detail_create" src="https://user-images.githubusercontent.com/52884298/268457514-409a7e11-4824-4ffb-8017-3da0012bd706.gif" width="700px">
+<img title="list_detail_create" src="https://user-images.githubusercontent.com/52884298/268457514-409a7e11-4824-4ffb-8017-3da0012bd706.gif" width="1000px">
