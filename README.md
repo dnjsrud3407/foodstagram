@@ -1,5 +1,5 @@
 # Foodstagram
-프로젝트 URL: <a href="http://www.foodstagram.site">푸드스타그램</a>
+프로젝트 URL: <a href="http://www.foodstagram.site" target="_blank">푸드스타그램</a>
 
 ## 프로젝트 소개
 음식점 리뷰를 작성하기 위해 만든 개인 웹 프로젝트입니다.
