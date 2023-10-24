@@ -14,15 +14,19 @@ public interface FoodPictureRepository extends JpaRepository<FoodPicture, Long> 
     @Query("update FoodPicture fp set fp.isDel = true where fp.food.id = :foodId")
     int updateIsDelTrueByFoodId(@Param("foodId") Long foodId);
 
+    @Query("select fp from FoodPicture fp where fp.food.id = :foodId and fp.isDel = false")
+    List<FoodPicture> findFoodPictureByFoodId(@Param("foodId") Long foodId);
+
+    @Query("select fp from FoodPicture fp " +
+            "where fp.food.id = :foodId and fp.isThumbnail = true and fp.isDel = false")
+    List<FoodPicture> findFoodPictureThumbnailByFoodId(@Param("foodId") Long foodId);
+
+    @Query("select fp from FoodPicture fp " +
+            "where fp.food.id = :foodId and fp.isThumbnail = false and fp.isDel = false")
+    List<FoodPicture> findFoodPicturesByFoodId(@Param("foodId") Long foodId);
+
     @Modifying
     @Query("update FoodPicture fp set fp.isDel = true where fp.food.id in :foodIds")
     void updateIsDelTrueByFoodIds(@Param("foodIds") List<Long> foodIds);
 
-    @Modifying
-    @Query("update FoodPicture fp set fp.isDel = true where fp.isThumbnail = true and fp.food.id = :foodId")
-    int updateThumbnailIsDelTrueByFoodId(@Param("foodId") Long foodId);
-
-    @Modifying
-    @Query("update FoodPicture fp set fp.isDel = true where fp.isThumbnail = false and fp.food.id = :foodId")
-    int updateFoodPictureIsDelTrueByFoodId(@Param("foodId") Long foodId);
 }

@@ -129,27 +129,12 @@ public class FoodService {
                 () -> new NoSuchElementException()
         );
 
-        // 기존 FoodCategory del 처리 후 새로운 FoodCategoryList 만들기
+        // 1. 기존 FoodCategory del 처리 후 새로운 FoodCategoryList 만들기
         List<Long> newCategoryIds = foodModifyDto.getCategoryIds();
         List<FoodCategory> foodCategoryList = makeFoodCategoryList(foodId, newCategoryIds);
 
-        // 1. 기존 FoodPicture del 처리하기 
-        // -1. Thumbnail FoodPictures 모두 변경된 경우
-        if(foodModifyDto.getIsThumbnailChange() && foodModifyDto.getIsFoodPicturesChange()) {
-            foodPictureRepository.updateIsDelTrueByFoodId(foodId);
-        }   // -2. Thumbnail 만 변경된 경우
-        else if(foodModifyDto.getIsThumbnailChange()) {
-            foodPictureRepository.updateThumbnailIsDelTrueByFoodId(foodId);
-        }   // -3. FoodPictures 만 변경된 경우
-        else if(foodModifyDto.getIsFoodPicturesChange()) {
-            foodPictureRepository.updateFoodPictureIsDelTrueByFoodId(foodId);
-        }
-        // 2. 새로운 FoodPictureList 만들기
-        // 바뀐게 없다면 기존 FoodPicture 로 유지
-        List<FoodPicture> foodPictureList = null;
-        if(foodPictureDtos != null) {
-            foodPictureList = makeFoodPictureList(foodPictureDtos);
-        }
+        // 2. 기존 FoodPicture del 처리 후 새로운 FoodPictureList 만들기
+        List<FoodPicture> foodPictureList = makeModifyFoodPictureList(foodId, foodModifyDto, foodPictureDtos);
 
         // FoodEntity에서 setter로 변경시켜준다.
         food.updateFood(list, foodCategoryList, foodPictureList,
@@ -213,6 +198,35 @@ public class FoodService {
         }
 
         return foodCategoryList;
+    }
+
+    @Transactional
+    private List<FoodPicture> makeModifyFoodPictureList(Long foodId, FoodModifyDto foodModifyDto, List<FoodPictureDto> foodPictureDtos) {
+        // 1. 기존 FoodPicture del 처리하기
+        List<FoodPicture> foodPictures = null;
+        // -1. Thumbnail FoodPictures 모두 변경된 경우
+        if(foodModifyDto.getIsThumbnailChange() && foodModifyDto.getIsFoodPicturesChange()) {
+            foodPictures = foodPictureRepository.findFoodPictureByFoodId(foodId);
+        } // -2. Thumbnail 만 변경된 경우
+        else if(foodModifyDto.getIsThumbnailChange()) {
+            foodPictures = foodPictureRepository.findFoodPictureThumbnailByFoodId(foodId);
+        } // -3. FoodPictures 만 변경된 경우
+        else if(foodModifyDto.getIsFoodPicturesChange()) {
+            foodPictures = foodPictureRepository.findFoodPicturesByFoodId(foodId);
+        }
+
+        for (FoodPicture foodPicture : foodPictures) {
+            foodPicture.changeIsDel(true);
+        }
+
+        // 2. 새로운 FoodPictureList 만들기
+        // 바뀐게 없다면 기존 FoodPicture 로 유지
+        List<FoodPicture> foodPictureList = null;
+        if(foodPictureDtos != null) {
+            foodPictureList = makeFoodPictureList(foodPictureDtos);
+        }
+
+        return foodPictureList;
     }
 
     @Transactional

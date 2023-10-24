@@ -62,4 +62,9 @@ public class FoodPicture extends BaseTimeEntity {
 
         return foodPicture;
     }
+
+    //== 변경 메서드 ==//
+    public void changeIsDel(Boolean value) {
+        this.setDel(value);
+    }
 }
