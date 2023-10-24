@@ -50,4 +50,9 @@ public class FoodCategory extends BaseTimeEntity {
         return foodCategory;
     }
 
+    //== 변경 메서드 ==//
+    public void changeIsDel(Boolean value) {
+        this.setDel(value);
+    }
+
 }

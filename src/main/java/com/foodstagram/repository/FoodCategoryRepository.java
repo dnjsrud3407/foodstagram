@@ -9,13 +9,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface FoodCategoryRepository extends JpaRepository<FoodCategory, Long> {
-    @Modifying
-    @Query("update FoodCategory fc set fc.isDel = true where fc.food.id = :foodId and fc.category.id not in :newCategoryIds")
-    int updateIsDelTrueByFoodIdAndNotInNewCategoryIds(@Param("foodId") Long foodId, @Param("newCategoryIds") List<Long> newCategoryIds);
-
-    @Modifying
-    @Query("update FoodCategory fc set fc.isDel = false where fc.food.id = :foodId and fc.category.id in :newCategoryIds")
-    int updateIsDelFalseByFoodIdAndInNewCategoryIds(@Param("foodId") Long foodId, @Param("newCategoryIds") List<Long> newCategoryIds);
+    @Query("select fc from FoodCategory fc where fc.food.id = :foodId and fc.category.id in :categoryIds")
+    List<FoodCategory> findFoodCategoryByFoodIdAndCategoryIds(@Param("foodId") Long foodId, @Param("categoryIds") List<Long> categoryIds);
 
     @Modifying
     @Query("update FoodCategory fc set fc.isDel = true where fc.food.id = :foodId")

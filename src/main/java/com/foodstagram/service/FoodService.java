@@ -130,9 +130,7 @@ public class FoodService {
         );
 
         // 기존 FoodCategory del 처리 후 새로운 FoodCategoryList 만들기
-        // -1.  기존 DB 카테고리와 새로운 카테고리가 겹치지 않는다면 isDel = true 로 변경
         List<Long> newCategoryIds = foodModifyDto.getCategoryIds();
-        foodCategoryRepository.updateIsDelTrueByFoodIdAndNotInNewCategoryIds(foodId, newCategoryIds);
         List<FoodCategory> foodCategoryList = makeFoodCategoryList(foodId, newCategoryIds);
 
         // 1. 기존 FoodPicture del 처리하기 
@@ -163,20 +161,47 @@ public class FoodService {
 
     @Transactional
     private List<FoodCategory> makeFoodCategoryList(Long foodId, List<Long> newCategoryIds) {
-        // -2. 기존 DB 카테고리와 새로운 카테고리가 겹친다면 isDel = false 로 변경
-        foodCategoryRepository.updateIsDelFalseByFoodIdAndInNewCategoryIds(foodId, newCategoryIds);
-
-        // -3. 현재 DB에 저장된 FoodCategory list를 조회한다 => dbCategoryIds
+        // -1. 현재 DB에 저장된 FoodCategory list를 조회한다 => dbCategoryIds
         List<Long> dbCategoryIds = foodCategoryRepository.findCategoryIdByFoodId(foodId);
 
+        // -2. 기존 DB 카테고리와 newCategoryIds가 겹친다면 isDel = false 로 변경(원래 갑이 true인 경우 할 필요 X)
+        // -3. 기존 DB 카테고리와 newCategoryIds가 겹치지 않는다면 isDel = true 로 변경(원래 갑이 false인 경우 할 필요 X)
         // -4. 기존 DB 카테고리에 없는 새로운 카테고리라면 FoodCategory 새로 생성하기
+        List<Long> updateCategoryIds = new ArrayList<>();
+        List<Long> deleteCategoryIds = new ArrayList<>();
         List<Long> insertCategoryIds = new ArrayList<>();
+
         for (Long newCategoryId : newCategoryIds) {
             if(!dbCategoryIds.contains(newCategoryId)) {
                 insertCategoryIds.add(newCategoryId);
+            } else {
+                updateCategoryIds.add(newCategoryId);
             }
         }
 
+        for (Long dbCategoryId : dbCategoryIds) {
+            if(!newCategoryIds.contains(dbCategoryId)) {
+                deleteCategoryIds.add(dbCategoryId);
+            }
+        }
+
+        // -2. 실행 (기존 DB 카테고리와 newCategoryIds가 겹치는 경우)
+        List<FoodCategory> updateCategories = foodCategoryRepository.findFoodCategoryByFoodIdAndCategoryIds(foodId, updateCategoryIds);
+        for (FoodCategory updateCategory : updateCategories) {
+            if(updateCategory.getIsDel()) {
+                updateCategory.changeIsDel(false);
+            }
+        }
+
+        // -3. 실행 (기존 DB 카테고리와 newCategoryIds가 겹치지 않은 경우)
+        List<FoodCategory> deleteCategories = foodCategoryRepository.findFoodCategoryByFoodIdAndCategoryIds(foodId, deleteCategoryIds);
+        for (FoodCategory deleteCategory : deleteCategories) {
+            if(!deleteCategory.getIsDel()) {
+                deleteCategory.changeIsDel(true);
+            }
+        }
+
+        // -4. 실행 (기존 DB 카테고리에 없는 새로운 카테고리인 경우)
         List<FoodCategory> foodCategoryList = new ArrayList<>();
         for (Long categoryId : insertCategoryIds) {
             Category category = categoryRepository.findById(categoryId).orElseThrow(
