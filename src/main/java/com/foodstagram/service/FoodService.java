@@ -215,8 +215,10 @@ public class FoodService {
             foodPictures = foodPictureRepository.findFoodPicturesByFoodId(foodId);
         }
 
-        for (FoodPicture foodPicture : foodPictures) {
-            foodPicture.changeIsDel(true);
+        if(foodPictures != null) {
+            for (FoodPicture foodPicture : foodPictures) {
+                foodPicture.changeIsDel(true);
+            }
         }
 
         // 2. 새로운 FoodPictureList 만들기
