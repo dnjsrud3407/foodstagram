@@ -50,6 +50,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           host: ${{ secrets.SERVER_IP }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          rm: true
           source: /home/runner/work/foodstagram/foodstagram
           target: ~/foodstagram/cicd
           strip_components: 1
