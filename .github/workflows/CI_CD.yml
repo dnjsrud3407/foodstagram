@@ -40,17 +40,22 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      ## 아티팩트 전송을 위한 임시 공간
+      - name: Create distribute
+        run: mkdir ~/dist
       - name: Download artifact
         uses: actions/download-artifact@v2.1.1
         with:
           name: jarFile
+          path: dist
       - name: SCP transfer
         uses: appleboy/scp-action@master
         with:
           username: ${{ secrets.SSH_USER }}
           host: ${{ secrets.SERVER_IP }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: /home/runner/work/foodstagram/foodstagram
+          rm: true
+          source: "dist/*.jar"
           target: ~/foodstagram/cicd/
           strip_components: 1
       - name: Execute remote commands
