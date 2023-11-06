@@ -30,20 +30,26 @@ jobs:
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: build
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        name: jarFile
+        path: build/libs/*.jar
   
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: SCP Command to Transfer Files
-        uses: appleboy/scp-action@v0.1.4
+      - name: Download artifact
+        uses: actions/download-artifact@v2.1.1
         with:
-          username: ${{ secrets.SSH_USER }}
-          host: ${{ secrets.SERVER_IP }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build/libs/*.jar"
-          target: "~/foodstagram/cicd"
-          strip_components: 2
+          name: jarFile
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: SCP transfer
+        run: scp *.jar ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:~/foodstagram/cicd
       - name: Execute remote commands
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "sudo fuser -k 8080/tcp"
