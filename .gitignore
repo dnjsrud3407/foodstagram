@@ -44,3 +44,6 @@ src/test/
 
 # yml
 *.yml
+
+# fileConfig
+src/main/java/com/foodstagram/config/FileConfig.java

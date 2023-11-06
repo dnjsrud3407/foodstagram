@@ -9,7 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -22,6 +22,9 @@ public class JwtTokenService {
 
     private final RedisService redisService;
 
+    @Value("${jwt.secret}")
+    private String secretKey;
+
     /**
      * Access 토큰 발급
      * @param loginId
@@ -32,7 +35,7 @@ public class JwtTokenService {
                 .withSubject(JwtProperties.ACCESS_TOKEN_COOKIE_NAME)
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME)) // 만료시간
                 .withClaim("loginId", loginId)
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+                .sign(Algorithm.HMAC512(secretKey));
 
         return jwtToken;
     }
@@ -45,7 +48,7 @@ public class JwtTokenService {
         String jwtToken = JWT.create()
                 .withSubject(JwtProperties.REFRESH_TOKEN_COOKIE_NAME)
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.REFRESH_TOKEN_EXPIRATION_TIME)) // 만료시간
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+                .sign(Algorithm.HMAC512(secretKey));
 
         return jwtToken;
     }
