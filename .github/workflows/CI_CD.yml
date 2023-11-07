@@ -70,4 +70,8 @@ jobs:
             echo "#### > now ing foodstagram pid find! ####"
             CURRENT_PID=`ps -ef | grep foodstagram | grep -v grep | awk '{print $2}'`
             
-            echo $CURRENT_PID
+            if [ $CURRENT_PID ]; then
+              echo "#### exist ing foodstagram ####"
+            else
+              echo "#### > no ing foodstagram ####"
+            fi
