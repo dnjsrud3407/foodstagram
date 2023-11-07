@@ -73,4 +73,4 @@ jobs:
             ./deploy.sh
             
             cd deploy/
-            ls
+            nohup java -jar foodstagram-0.0.1-SNAPSHOT.jar &
