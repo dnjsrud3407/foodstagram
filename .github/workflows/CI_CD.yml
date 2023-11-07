@@ -63,4 +63,4 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "dist/*"
-          target: "~/foodstagram/cicd"
+          target: "~/foodstagram/deploy"
