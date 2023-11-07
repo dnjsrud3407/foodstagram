@@ -33,12 +33,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: SCP transfer
-        uses: appleboy/scp-action@master
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@master
         with:
           username: ${{ secrets.SSH_USER }}
           host: ${{ secrets.SERVER_IP }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            whoami
+            echo "ssh Connected"
+            ls
