@@ -84,4 +84,4 @@ jobs:
 
             echo "#### start deploy ####"
             cd $SOURCE_DIR
-            sudo java -jar $FILE_NAME &
+            nohup java -jar $FILE_NAME &
