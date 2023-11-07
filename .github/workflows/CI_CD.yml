@@ -69,4 +69,4 @@ jobs:
           script_stop: true
           script: |
             echo "start deploy.sh"
-            ~/foodstagram/deploy.sh
+            nohup ~/foodstagram/deploy.sh &
