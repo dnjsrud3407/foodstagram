@@ -67,4 +67,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            sh ~/foodstagram/deploy.sh
+            ~/foodstagram/deploy.sh
