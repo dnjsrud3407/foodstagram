@@ -46,8 +46,8 @@ jobs:
       - name: Deploy Prod use SCP
         uses: appleboy/scp-action@master
         with:
-          username: ubuntu
-          host: ${{ secrets.SSH_USER }}
+          username: ${{ secrets.SSH_USER }}
+          host: ${{ secrets.SERVER_IP }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "./build/libs/*.jar"
           target: "./foodstagram/cicd"
