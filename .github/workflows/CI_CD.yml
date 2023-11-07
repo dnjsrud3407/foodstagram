@@ -66,22 +66,5 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          script: |
-            echo "#### > now ing foodstagram pid find! ####"
-            SOURCE_DIR=~/foodstagram/deploy
-            FILE_NAME=`find $SOURCE_DIR/*.jar -printf "%f\n"`
-            CURRENT_PID=`ps -ef | grep foodstagram | grep -v grep | awk '{print $2}'`
-            
-            if [ $CURRENT_PID ]; then
-              echo "#### exist ing foodstagram ####"
-              sudo kill -9 $CURRENT_PID
-            else
-              echo "#### > no ing foodstagram ####"
-            fi
-
-            echo "#### move yml ####"
-            cp ~/foodstagram/application.yml $SOURCE_DIR
-
-            echo "#### start deploy ####"
-            cd $SOURCE_DIR
-            nohup java -jar $FILE_NAME 1>nohup/stdout.txt 2>nohup/stderr.txt &
+          script_stop: true
+          script: chmod +x ~/foodstagram/deploy.sh
