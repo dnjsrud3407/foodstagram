@@ -68,6 +68,8 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             echo "#### > now ing foodstagram pid find! ####"
+            SOURCE_DIR=~/foodstagram/deploy
+            FILE_NAME=`find $SOURCE_DIR/*.jar -printf "%f\n"`
             CURRENT_PID=`ps -ef | grep foodstagram | grep -v grep | awk '{print $2}'`
             
             if [ $CURRENT_PID ]; then
@@ -78,8 +80,8 @@ jobs:
             fi
 
             echo "#### move yml ####"
-            cp ~/foodstagram/application.yml ~/foodstagram/deploy/
+            cp ~/foodstagram/application.yml $SOURCE_DIR
 
             echo "#### start deploy ####"
-            cd ~/foodstagram/deploy
-            nohup java -jar foodstagram-0.0.1-SNAPSHOT.jar &
+            cd $SOURCE_DIR
+            sudo java -jar $FILE_NAME &
