@@ -62,5 +62,6 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SERVER_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          rm: true
           source: "dist/*"
-          target: "~/foodstagram/deploy"
+          target: "~/foodstagram/deploy2"
