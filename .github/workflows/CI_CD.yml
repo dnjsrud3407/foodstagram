@@ -69,4 +69,8 @@ jobs:
           script_stop: true
           script: |
             echo "start deploy.sh"
-            ~/foodstagram/deploy.sh
+            cd ~/foodstagram
+            ./deploy.sh
+            
+            cd deploy/
+            ls
