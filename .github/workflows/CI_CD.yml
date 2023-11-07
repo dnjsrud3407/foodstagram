@@ -47,7 +47,6 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             echo "ssh Connected"
-            ls
       ## 아티팩트 전송을 위한 임시 공간
       - name: Create dir
         run: mkdir ~/dist
@@ -57,11 +56,11 @@ jobs:
           name: jarFile
           path: dist
       - name: Deploy Prod use SCP
-        uses: appleboy/scp-action@v0.0.1
+        uses: appleboy/scp-action@v0.1.4
         with:
-          username: ${{ secrets.SSH_USER }}
           host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SERVER_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "dist/*"
-          target: "./foodstagram/cicd"
-          rm: true
+          target: "~/foodstagram/cicd"
