@@ -38,15 +38,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: SSH Remote Commands
-        uses: appleboy/ssh-action@master
-        with:
-          username: ${{ secrets.SSH_USER }}
-          host: ${{ secrets.SERVER_IP }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SERVER_PORT }}
-          script: |
-            echo "ssh Connected"
       ## 아티팩트 전송을 위한 임시 공간
       - name: Create dir
         run: mkdir ~/dist
@@ -55,6 +46,7 @@ jobs:
         with:
           name: jarFile
           path: dist
+      ## SSH 연결로 아티팩트 서버에 다운로드
       - name: Deploy Prod use SCP
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -64,4 +56,15 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           rm: true
           source: "dist/*"
-          target: "~/foodstagram/deploy2"
+          target: "~/foodstagram/deploy"
+          strip_components: 1
+      ## deploy.sh 파일 실행
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@master
+        with:
+          username: ${{ secrets.SSH_USER }}
+          host: ${{ secrets.SERVER_IP }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            echo "hi"
