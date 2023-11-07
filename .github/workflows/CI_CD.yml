@@ -68,19 +68,19 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script_stop: true
           script: |
-            echo "> now ing foodstagram pid find!"
+            echo "#### > now ing foodstagram pid find! ####"
             CURRENT_PID=`ps -ef | grep foodstagram | grep -v grep | awk '{print $2}'`
+            
             if [ "$CURRENT_PID" ]; then
-              echo "exist ing foodstagram"
-              echo $CURRENT_PID
+              echo "#### exist ing foodstagram ####"
               sudo kill -9 $CURRENT_PID
             else
-              echo "> no ing foodstagram"
+              echo "#### > no ing foodstagram ####"
             fi
             
-            echo "move yml"
+            echo "#### move yml ####"
             cp ~/foodstagram/application.yml ~/foodstagram/deploy/
 
-            echo "start deploy"
+            echo "#### start deploy ####"
             cd ~/foodstagram/deploy
             nohup java -jar foodstagram-0.0.1-SNAPSHOT.jar &
