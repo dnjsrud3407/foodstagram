@@ -69,4 +69,5 @@ jobs:
           script_stop: true
           script: |
             echo "start deploy.sh"
-            nohup ~/foodstagram/deploy.sh &
+            ~/foodstagram/deploy.sh
+            nohup java -jar foodstagram-0.0.1-SNAPSHOT.jar &
