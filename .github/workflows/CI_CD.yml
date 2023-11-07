@@ -70,4 +70,3 @@ jobs:
           script: |
             echo "start deploy.sh"
             ~/foodstagram/deploy.sh
-            nohup java -jar foodstagram-0.0.1-SNAPSHOT.jar &
