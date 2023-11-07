@@ -84,4 +84,4 @@ jobs:
 
             echo "#### start deploy ####"
             cd $SOURCE_DIR
-            nohup java -jar $FILE_NAME > /dev/null 2>&1 &
+            nohup java -jar $FILE_NAME 1>nohup/stdout.txt 2>nohup/stderr.txt &
