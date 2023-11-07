@@ -49,6 +49,6 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           host: ${{ secrets.SERVER_IP }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "./build/libs/*.jar"
+          source: "./build/libs/*"
           target: "./foodstagram/cicd"
           strip_components: 2
