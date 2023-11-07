@@ -30,24 +30,11 @@ jobs:
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: build
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: jarFile
-        path: build/libs/*.jar
   
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      ## 아티팩트 전송을 위한 임시 공간
-      - name: Create distribute
-        run: mkdir ~/dist
-      - name: Download artifact
-        uses: actions/download-artifact@v2.1.1
-        with:
-          name: jarFile
-          path: dist
       - name: SCP transfer
         uses: appleboy/scp-action@master
         with:
@@ -55,8 +42,8 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           rm: true
-          source: "dist/*.jar"
-          target: ~/foodstagram/cicd/
+          source: "build/libs/*.jar"
+          target: "source"
           strip_components: 1
       - name: Execute remote commands
         run: |
