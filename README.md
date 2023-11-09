@@ -7,7 +7,7 @@
 음식점에 점수를 매기거나 리스트로 등록하기, 지도 기능 등 가게에 대한 다양한 정보를 작성할 수 있습니다.
 <br><br>
 SpringBoot로 개발하였고 Kakao OAuth2 로그인 기능, 로그인시 JWT 발급하여 Redis에 저장, Oracle Cloud로 배포 등 여러 기능을 사용하여 구현하였습니다.
-Github Actions를 사용하여 CI/CD를 구현하였습니다.
+Github Action을 사용하여 CI/CD를 구현하였습니다.
 
 <br>
 
