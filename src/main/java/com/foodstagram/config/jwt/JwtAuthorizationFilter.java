@@ -47,6 +47,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         try {
             System.out.println("인증이나 권한이 필요한 주소 요청");
+            System.out.println("requestURI = " + requestURI);
 
             // cookie에서 jwt 토큰 가져옴
             Cookie accessTokenCookie = null;
